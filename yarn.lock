@@ -484,6 +484,11 @@
   dependencies:
     "function-bind" "^1.1.1"
 
+"imask@^6.4.3":
+  "integrity" "sha512-aH2GHemGkr3cbRBfhogHMIx05eUxdHrZNlKTTLmz8VxpSopuHHJ8+85FsDlBVQqxPlDLhZuwj4lpHHWbLOdBSw=="
+  "resolved" "https://registry.npmjs.org/imask/-/imask-6.4.3.tgz"
+  "version" "6.4.3"
+
 "immutable@^4.0.0":
   "integrity" "sha512-7WYV7Q5BTs0nlQm7tl92rDYYoyELLKHoDMBKhrxEoiV4mrfVdRz8hzPiYOzH7yWjzoVEamxRuAqhxL2PLRwZYQ=="
   "resolved" "https://registry.npmjs.org/immutable/-/immutable-4.2.1.tgz"
@@ -869,7 +874,20 @@
   optionalDependencies:
     "fsevents" "~2.3.2"
 
-"vue@^3.0.0", "vue@^3.2.25", "vue@^3.2.41", "vue@3.2.45":
+"vue-demi@^0.13.11":
+  "integrity" "sha512-IR8HoEEGM65YY3ZJYAjMlKygDQn25D5ajNFNoKh9RSDMQtlzCxtfQjdQgv9jjK+m3377SsJXY8ysq8kLCZL25A=="
+  "resolved" "https://registry.npmjs.org/vue-demi/-/vue-demi-0.13.11.tgz"
+  "version" "0.13.11"
+
+"vue-imask@^6.4.3":
+  "integrity" "sha512-lGHtknLGZMtWPaQCkeqGrdOpXMq2LfPhiV1NaJ1Kn4YRNXOWFGZt135tRBs5W0gYXTP5g947andrxcJNlPW07g=="
+  "resolved" "https://registry.npmjs.org/vue-imask/-/vue-imask-6.4.3.tgz"
+  "version" "6.4.3"
+  dependencies:
+    "imask" "^6.4.3"
+    "vue-demi" "^0.13.11"
+
+"vue@^3.0.0", "vue@^3.0.0-0 || ^2.6.0", "vue@^3.2.25", "vue@^3.2.41", "vue@>=2.2.0", "vue@3.2.45":
   "integrity" "sha512-9Nx/Mg2b2xWlXykmCwiTUCWHbWIj53bnkizBxKai1g61f2Xit700A1ljowpTIM11e3uipOeiPcSqnmBg6gyiaA=="
   "resolved" "https://registry.npmjs.org/vue/-/vue-3.2.45.tgz"
   "version" "3.2.45"

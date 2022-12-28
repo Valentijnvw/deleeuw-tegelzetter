@@ -1,5 +1,5 @@
 <script setup>
-import GuestLayout from '@/Layouts/GuestLayout.vue';
+import LoginLayout from '@/Layouts/LoginLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
@@ -20,40 +20,33 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout>
-        <Head title="Forgot Password" />
+    <LoginLayout>
+        <form class="js-validate needs-validation" novalidate>
+              <div class="text-center">
+                <div class="mb-5">
+                  <h1 class="display-5">Wachtwoord vergeten?</h1>
+                  <p>Voer het e-mailadres van uw account in en we mailen u de instructies om uw wachtwoord opnieuw in te stellen.</p>
+                </div>
+              </div>
 
-        <div class="mb-4 text-sm text-gray-600">
-            Forgot your password? No problem. Just let us know your email address and we will email you a password reset
-            link that will allow you to choose a new one.
-        </div>
+              <!-- Form -->
+              <div class="mb-4">
+                <label class="form-label" for="resetPasswordSrEmail" tabindex="0">Uw e-mailadres</label>
 
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-            {{ status }}
-        </div>
+                <input v-model="form.email" type="email" class="form-control form-control-lg" name="email" id="resetPasswordSrEmail" tabindex="1" placeholder="Voer uw e-mailadres in" aria-label="Voer uw e-mailadres in" required>
+                <span class="invalid-feedback">Please enter a valid email address.</span>
+              </div>
+              <!-- End Form -->
 
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
+              <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary btn-lg" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">Submit</button>
 
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
-
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Email Password Reset Link
-                </PrimaryButton>
-            </div>
-        </form>
-    </GuestLayout>
+                <div class="text-center">
+                  <a class="btn btn-link" :href="route('login')">
+                    <i class="bi-chevron-left"></i> Back to Sign in
+                  </a>
+                </div>
+              </div>
+            </form>
+    </LoginLayout>
 </template>

@@ -7,7 +7,49 @@ import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/inertia-vue3';
 
+const navItems = [
+  {
+    name: "Dashboard",
+    routeName: 'dashboard',
+    icon: "bi-house-door"
+  }
+]
 const showingNavigationDropdown = ref(false);
+
+
+(function () {
+// STYLE SWITCHER
+// =======================================================
+const $dropdownBtn = document.getElementById('selectThemeDropdown') // Dropdowon trigger
+const $variants = document.querySelectorAll(`[aria-labelledby="selectThemeDropdown"] [data-icon]`) // All items of the dropdown
+
+// Function to set active style in the dorpdown menu and set icon for dropdown trigger
+const setActiveStyle = function () {
+    $variants.forEach($item => {
+    if ($item.getAttribute('data-value') === HSThemeAppearance.getOriginalAppearance()) {
+        $dropdownBtn.innerHTML = `<i class="${$item.getAttribute('data-icon')}" />`
+        return $item.classList.add('active')
+    }
+
+    $item.classList.remove('active')
+    })
+}
+
+// Add a click event to all items of the dropdown to set the style
+$variants.forEach(function ($item) {
+    $item.addEventListener('click', function () {
+    HSThemeAppearance.setAppearance($item.getAttribute('data-value'))
+    })
+})
+
+// Call the setActiveStyle on load page
+setActiveStyle()
+
+// Add event listener on change style to call the setActiveStyle function
+window.addEventListener('on-hs-appearance-change', function () {
+    setActiveStyle()
+})
+})()
 </script>
 
 <template>
@@ -16,9 +58,8 @@ const showingNavigationDropdown = ref(false);
       <nav class="js-mega-menu navbar-nav-wrap">
         <!-- Logo -->
 
-        <a class="navbar-brand" href="../index.html" aria-label="Front">
+        <a class="navbar-brand" href="/" aria-label="Front">
           <img class="navbar-brand-logo" src="../../svg/logos/logo.svg" alt="Logo" data-hs-theme-appearance="default">
-          <img class="navbar-brand-logo" src="../../svg/logos-light/logo.svg" alt="Logo" data-hs-theme-appearance="dark">
         </a>
 
         <!-- End Logo -->
@@ -619,7 +660,7 @@ const showingNavigationDropdown = ref(false);
                   </div>
                   <!-- End Dropdown -->
 
-                  <a class="dropdown-item" href="#">Profile &amp; account</a>
+                  <a class="dropdown-item" :href="route('profile.edit')">Profile &amp; account</a>
                   <a class="dropdown-item" href="#">Settings</a>
 
                   <div class="dropdown-divider"></div>
@@ -688,236 +729,13 @@ const showingNavigationDropdown = ref(false);
         <!-- Collapse -->
         <div class="collapse navbar-collapse" id="navbarContainerNavDropdown">
           <ul class="navbar-nav">
-            <!-- Dashboards -->
-            <li class="hs-has-sub-menu nav-item">
-              <a id="dashboardsMegaMenu" class="hs-mega-menu-invoker nav-link dropdown-toggle active" href="#" role="button"><i class="bi-house-door dropdown-item-icon"></i> Dashboards</a>
 
-              <!-- Mega Menu -->
-              <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless" aria-labelledby="dashboardsMegaMenu" style="min-width: 14rem;">
-                <a class="dropdown-item active" href="../index.html">Default</a>
-                <a class="dropdown-item " href="../dashboard-alternative.html">Alternative</a>
-              </div>
-              <!-- End Mega Menu -->
-            </li>
-            <!-- End Dashboards -->
-
-            <!-- Pages -->
-            <li class="hs-has-sub-menu nav-item">
-              <a id="pagesMegaMenu" class="hs-mega-menu-invoker nav-link dropdown-toggle " href="#" role="button"><i class="bi-files-alt dropdown-item-icon"></i> Pages</a>
-
-              <!-- Mega Menu -->
-              <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless" aria-labelledby="pagesMegaMenu" style="min-width: 14rem;">
-                <!-- Users -->
-                <div class="hs-has-sub-menu nav-item">
-                  <a id="usersMegaMenu" class="hs-mega-menu-invoker dropdown-item dropdown-toggle " href="#" role="button">Users</a>
-
-                  <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless" aria-labelledby="usersMegaMenu" style="min-width: 14rem;">
-                    <a class="dropdown-item " href="../users.html">Overview</a>
-                    <a class="dropdown-item " href="../users-leaderboard.html">Leaderboard</a>
-                    <a class="dropdown-item " href="../users-add-user.html">Add User <span class="badge bg-info rounded-pill ms-1">Hot</span></a>
-                  </div>
-                </div>
-                <!-- End Users -->
-
-                <!-- User Profile -->
-                <div class="hs-has-sub-menu nav-item">
-                  <a id="userProfileMegaMenu" class="hs-mega-menu-invoker dropdown-item dropdown-toggle " href="#" role="button">User Profile <span class="badge bg-primary rounded-pill ms-1">5</span></a>
-
-                  <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless" aria-labelledby="userProfileMegaMenu" style="min-width: 14rem;">
-                    <a class="dropdown-item " href="../user-profile.html">Profile</a>
-                    <a class="dropdown-item " href="../user-profile-teams.html">Teams</a>
-                    <a class="dropdown-item " href="../user-profile-projects.html">Projects</a>
-                    <a class="dropdown-item " href="../user-profile-connections.html">Connections</a>
-                    <a class="dropdown-item " href="../user-profile-my-profile.html">My Profile</a>
-                  </div>
-                </div>
-                <!-- End User Profile -->
-
-                <!-- Account -->
-                <div class="hs-has-sub-menu nav-item">
-                  <a id="accountMegaMenu" class="hs-mega-menu-invoker dropdown-item dropdown-toggle " href="#" role="button">Account</a>
-
-                  <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless" aria-labelledby="accountMegaMenu" style="min-width: 14rem;">
-                    <a class="dropdown-item " href="../account-settings.html">Settings</a>
-                    <a class="dropdown-item " href="../account-billing.html">Billing</a>
-                    <a class="dropdown-item " href="../account-invoice.html">Invoice</a>
-                  </div>
-                </div>
-                <!-- End Account -->
-
-                <!-- E-commerce -->
-                <div class="hs-has-sub-menu nav-item">
-                  <a id="ecommerceMegaMenu" class="hs-mega-menu-invoker dropdown-item dropdown-toggle " href="#" role="button">E-commerce</a>
-
-                  <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless" aria-labelledby="ecommerceMegaMenu" style="min-width: 14rem;">
-                    <a class="dropdown-item " href="../ecommerce.html">Overview</a>
-
-                    <!-- Products -->
-                    <div class="hs-has-sub-menu nav-item">
-                      <a id="productsMegaMenu" class="hs-mega-menu-invoker dropdown-item dropdown-toggle " href="#" role="button">Products</a>
-
-                      <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless" aria-labelledby="productsMegaMenu" style="min-width: 14rem;">
-                        <a class="dropdown-item " href="../ecommerce-products.html">Products</a>
-                        <a class="dropdown-item " href="../ecommerce-product-details.html">Product Details</a>
-                        <a class="dropdown-item " href="../ecommerce-add-product.html">Add Product</a>
-                      </div>
-                    </div>
-                    <!-- End Products -->
-
-                    <!-- Products -->
-                    <div class="hs-has-sub-menu nav-item">
-                      <a id="ordersMegaMenu" class="hs-mega-menu-invoker dropdown-item dropdown-toggle " href="#" role="button">Orders</a>
-
-                      <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless" aria-labelledby="ordersMegaMenu" style="min-width: 14rem;">
-                        <a class="dropdown-item " href="../ecommerce-orders.html">Orders</a>
-                        <a class="dropdown-item " href="../ecommerce-order-details.html">Order Details</a>
-                      </div>
-                    </div>
-                    <!-- End Products -->
-
-                    <!-- Customers -->
-                    <div class="hs-has-sub-menu nav-item">
-                      <a id="customersMegaMenu" class="hs-mega-menu-invoker dropdown-item dropdown-toggle " href="#" role="button">Customers</a>
-
-                      <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless" aria-labelledby="customersMegaMenu" style="min-width: 14rem;">
-                        <a class="dropdown-item " href="../ecommerce-customers.html">Customers</a>
-                        <a class="dropdown-item " href="../ecommerce-customer-details.html">Customer Details</a>
-                        <a class="dropdown-item " href="../ecommerce-add-customers.html">Add Customers</a>
-                      </div>
-                    </div>
-                    <!-- End Customers -->
-
-                    <a class="dropdown-item " href="../ecommerce-referrals.html">Referrals</a>
-                    <a class="dropdown-item " href="../ecommerce-manage-reviews.html">Manage Reviews</a>
-                    <a class="dropdown-item " href="../ecommerce-checkout.html">Checkout</a>
-                  </div>
-                </div>
-                <!-- End E-commerce -->
-
-                <!-- Projects -->
-                <div class="hs-has-sub-menu nav-item">
-                  <a id="projectsMegaMenu" class="hs-mega-menu-invoker dropdown-item dropdown-toggle " href="#" role="button">Projects</a>
-
-                  <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless" aria-labelledby="projectsMegaMenu" style="min-width: 14rem;">
-                    <a class="dropdown-item " href="../projects.html">Overview</a>
-                    <a class="dropdown-item " href="../projects-timeline.html">Timeline</a>
-                  </div>
-                </div>
-                <!-- End Projects -->
-
-                <!-- Project -->
-                <div class="hs-has-sub-menu nav-item">
-                  <a id="projectMegaMenu" class="hs-mega-menu-invoker dropdown-item dropdown-toggle " href="#" role="button">Project</a>
-
-                  <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless" aria-labelledby="projectMegaMenu" style="min-width: 14rem;">
-                    <a class="dropdown-item " href="../project.html">Overview</a>
-                    <a class="dropdown-item " href="../project-files.html">Files</a>
-                    <a class="dropdown-item " href="../project-activity.html">Activity</a>
-                    <a class="dropdown-item " href="../project-teams.html">Teams</a>
-                    <a class="dropdown-item " href="../project-settings.html">Settings</a>
-                  </div>
-                </div>
-                <!-- End Project -->
-
-                <!-- Authentication -->
-                <div class="hs-has-sub-menu nav-item">
-                  <a id="authenticationMegaMenu" class="hs-mega-menu-invoker dropdown-item dropdown-toggle " href="#" role="button">Authentication</a>
-
-                  <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless" aria-labelledby="authenticationMegaMenu" style="min-width: 14rem;">
-                    <!-- Log In -->
-                    <div class="hs-has-sub-menu nav-item">
-                      <a id="loginMegaMenu" class="hs-mega-menu-invoker dropdown-item dropdown-toggle " href="#" role="button">Log In</a>
-
-                      <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless" aria-labelledby="loginMegaMenu" style="min-width: 14rem;">
-                        <a class="dropdown-item " href="../authentication-login-basic.html">Basic</a>
-                        <a class="dropdown-item " href="../authentication-login-cover.html">Cover</a>
-                      </div>
-                    </div>
-                    <!-- End Log In -->
-
-                    <!-- Sign Up -->
-                    <div class="hs-has-sub-menu nav-item">
-                      <a id="signupMegaMenu" class="hs-mega-menu-invoker dropdown-item dropdown-toggle " href="#" role="button">Sign Up</a>
-
-                      <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless" aria-labelledby="signupMegaMenu" style="min-width: 14rem;">
-                        <a class="dropdown-item " href="../authentication-signup-basic.html">Basic</a>
-                        <a class="dropdown-item " href="../authentication-signup-cover.html">Cover</a>
-                      </div>
-                    </div>
-                    <!-- End Sign Up -->
-
-                    <!-- Reset Password -->
-                    <div class="hs-has-sub-menu nav-item">
-                      <a id="resetPasswordMegaMenu" class="hs-mega-menu-invoker dropdown-item dropdown-toggle " href="#" role="button">Reset Password</a>
-
-                      <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless" aria-labelledby="resetPasswordMegaMenu" style="min-width: 14rem;">
-                        <a class="dropdown-item " href="../authentication-reset-password-basic.html">Basic</a>
-                        <a class="dropdown-item " href="../authentication-reset-password-cover.html">Cover</a>
-                      </div>
-                    </div>
-                    <!-- End Reset Password -->
-
-                    <!-- Email Verification -->
-                    <div class="hs-has-sub-menu nav-item">
-                      <a id="emailVerificationMegaMenu" class="hs-mega-menu-invoker dropdown-item dropdown-toggle " href="#" role="button">Email Verification</a>
-
-                      <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless" aria-labelledby="emailVerificationMegaMenu" style="min-width: 14rem;">
-                        <a class="dropdown-item " href="../authentication-email-verification-basic.html">Basic</a>
-                        <a class="dropdown-item " href="../authentication-email-verification-cover.html">Cover</a>
-                      </div>
-                    </div>
-                    <!-- End Email Verification -->
-
-                    <!-- 2-step Verification -->
-                    <div class="hs-has-sub-menu nav-item">
-                      <a id="2stepVerificationMegaMenu" class="hs-mega-menu-invoker dropdown-item dropdown-toggle " href="#" role="button">2-step Verification</a>
-
-                      <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless" aria-labelledby="2stepVerificationMegaMenu" style="min-width: 14rem;">
-                        <a class="dropdown-item " href="../authentication-2-step-verification-basic.html">Basic</a>
-                        <a class="dropdown-item " href="../authentication-2-step-verification-cover.html">Cover</a>
-                      </div>
-                    </div>
-                    <!-- End 2-step Verification -->
-
-                    <a class="dropdown-item" href="javascript:;" data-bs-toggle="modal" data-bs-target="#welcomeMessageModal">Welcome Message</a>
-                    <a class="dropdown-item " href="../error-404.html">Error 404</a>
-                    <a class="dropdown-item " href="../error-500.html">Error 500</a>
-                  </div>
-                </div>
-                <!-- End Authentication -->
-
-                <a class="dropdown-item " href="../api-keys.html" data-placement="left">API Keys</a>
-                <a class="dropdown-item " href="../welcome-page.html" data-placement="left">Welcome Page</a>
-                <a class="dropdown-item " href="../landing.html" data-placement="left">Landing Page <span class="badge bg-info rounded-pill ms-1">New</span></a>
-              </div>
-              <!-- End Mega Menu -->
-            </li>
-            <!-- End Pages -->
-
-            <!-- Apps -->
-            <li class="hs-has-sub-menu nav-item">
-              <a id="appsMegaMenu" class="hs-mega-menu-invoker nav-link dropdown-toggle " href="#" role="button"><i class="bi-app-indicator dropdown-item-icon"></i> Apps</a>
-
-              <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless" aria-labelledby="appsMegaMenu" style="min-width: 14rem;">
-                <a class="dropdown-item " href="../apps-kanban.html">Kanban</a>
-                <a class="dropdown-item " href="../apps-calendar.html">Calendar</a>
-                <a class="dropdown-item " href="../apps-invoice-generator.html">Invoice Generator</a>
-                <a class="dropdown-item " href="../apps-file-manager.html">File Manager</a>
-              </div>
-            </li>
-            <!-- End Apps -->
-
-            <li class="nav-item">
-              <a class="nav-link " href="../layouts/index.html">
-                <i class="bi-grid-1x2 dropdown-item-icon"></i> Layouts
+            <li class="nav-item" v-for="navItem in navItems" :key="navItem.name">
+              <a class="nav-link " :href="route(navItem.routeName)">
+                <i class="dropdown-item-icon" :class="navItem.icon"></i> {{ navItem.name }}
               </a>
             </li>
 
-            <li class="nav-item">
-              <a class="nav-link " href="../documentation/index.html" data-placement="left">
-                <i class="bi-book dropdown-item-icon"></i> Docs
-              </a>
-            </li>
           </ul>
 
         </div>
@@ -927,6 +745,7 @@ const showingNavigationDropdown = ref(false);
   </header>
   <!-- ========== MAIN CONTENT ========== -->
     <main id="content" role="main" class="main">
+        
         <!-- Content -->
         <div class="content container">
             <slot />
