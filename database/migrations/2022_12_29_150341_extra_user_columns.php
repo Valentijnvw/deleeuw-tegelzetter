@@ -14,9 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->text('firstName');
-            $table->text('lastName');
+            $table->text('first_name');
+            $table->text('last_name');
             $table->text('phone');
+            $table->text('appearance');
+            $table->dropColumn('name');
         });
     }
 
@@ -28,7 +30,10 @@ return new class extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('role');
+            $table->dropColumn('first_name');
+            $table->dropColumn('last_name');
+            $table->dropColumn('phone');
+            $table->dropColumn('appearance');
         });
     }
 };

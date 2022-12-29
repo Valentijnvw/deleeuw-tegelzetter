@@ -5,6 +5,8 @@ namespace App\Http\Middleware;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tightenco\Ziggy\Ziggy;
+use App\Models\User;
+use App\Models\Customer;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -34,6 +36,7 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request)
     {
+        dd(User::find(1)->customer);
         return array_merge(parent::share($request), [
             'auth' => [
                 'user' => $request->user(),
@@ -43,6 +46,7 @@ class HandleInertiaRequests extends Middleware
                     'location' => $request->url(),
                 ]);
             },
+            'appearance' => session('appearance'),
         ]);
     }
 }

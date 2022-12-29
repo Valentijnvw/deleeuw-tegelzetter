@@ -5,7 +5,9 @@ import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import { Link } from '@inertiajs/inertia-vue3';
+import { Link, usePage } from '@inertiajs/inertia-vue3';
+
+console.log(usePage().props.value);
 
 const navItems = [
   {
@@ -591,20 +593,18 @@ window.addEventListener('on-hs-appearance-change', function () {
             <li class="nav-item">
               <!-- Style Switcher -->
               <div class="dropdown ">
-                <button type="button" class="btn btn-ghost-secondary btn-icon rounded-circle" id="selectThemeDropdown" data-bs-toggle="dropdown" aria-expanded="false" data-bs-dropdown-animation>
+                <button type="button" class="btn btn-ghost-secondary btn-icon rounded-circle" id="selectThemeDropdown" data-bs-toggle="dropdown" aria-expanded="false" data-bs-dropdown-animation=""><i class="bi-brightness-high"></i></button>
 
-                </button>
-
-                <div class="dropdown-menu dropdown-menu-end navbar-dropdown-menu navbar-dropdown-menu-borderless" aria-labelledby="selectThemeDropdown">
+                <div class="dropdown-menu dropdown-menu-end navbar-dropdown-menu navbar-dropdown-menu-borderless" aria-labelledby="selectThemeDropdown" style="opacity: 1;">
                   <a class="dropdown-item" href="#" data-icon="bi-moon-stars" data-value="auto">
                     <i class="bi-moon-stars me-2"></i>
                     <span class="text-truncate" title="Auto (system default)">Auto (system default)</span>
                   </a>
-                  <a class="dropdown-item" href="#" data-icon="bi-brightness-high" data-value="default">
+                  <a class="dropdown-item active" href="#" data-icon="bi-brightness-high" data-value="default">
                     <i class="bi-brightness-high me-2"></i>
                     <span class="text-truncate" title="Default (light mode)">Default (light mode)</span>
                   </a>
-                  <a class="dropdown-item active" href="#" data-icon="bi-moon" data-value="dark">
+                  <a class="dropdown-item" href="#" data-icon="bi-moon" data-value="dark">
                     <i class="bi-moon me-2"></i>
                     <span class="text-truncate" title="Dark">Dark</span>
                   </a>

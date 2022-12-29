@@ -3,9 +3,11 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Modal from '@/Components/Modal.vue';
 import { Head, useForm } from '@inertiajs/inertia-vue3';
 import { ref } from 'vue';
+import { capitalizeFirstLetter } from '@/util/stringUtils';
 
 const props = defineProps({
-    userList: Array
+    userList: Array,
+    roleList: Array,
 });
 
 const editingUser = ref(null);
@@ -35,12 +37,15 @@ const submitPasswordForm = () => {
 
 // Edit user button
 
+
 function editUserModal(user) {
   editingUser.value = user;
 
   detailsForm.id = user.id;
-  detailsForm.firstName = user.name;
+  detailsForm.firstName = user.first_name;
+  detailsForm.lastName = user.last_name;
   detailsForm.email = user.email;
+  detailsForm.accountType = user.roles[0].id;
 
   passwordForm.id = user.id;
 };
@@ -395,11 +400,7 @@ function editUserModal(user) {
                   </div>
                 </th>
                 <th class="table-column-ps-0">Naam</th>
-                <th>Position</th>
-                <th>Country</th>
-                <th>Status</th>
-                <th>Portfolio</th>
-                <th>Role</th>
+                <th>Account type</th>
                 <th></th>
               </tr>
             </thead>
@@ -414,35 +415,22 @@ function editUserModal(user) {
                   </div>
                 </td>
                 <td class="table-column-ps-0">
-                  <a class="d-flex align-items-center" href="./user-profile.html">
+                  <span class="d-flex align-items-center">
                     <div class="avatar avatar-circle">
                       <img class="avatar-img" src="../../../img/160x160/img10.jpg" alt="Image Description">
                     </div>
                     <div class="ms-3">
-                      <span class="d-block h5 text-inherit mb-0">{{ user.name }} <i class="bi-patch-check-fill text-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Top endorsed"></i></span>
+                      <span class="d-block h5 text-inherit mb-0">{{ user.first_name + " " + user.last_name }}</span>
                       <span class="d-block fs-5 text-body">{{ user.email }}</span>
                     </div>
-                  </a>
+                  </span>
                 </td>
                 <td>
-                  <span class="d-block h5 mb-0">{{ user.roles.map(role => role.name).join(", ") }}</span>
+                  <span class="d-block h5 mb-0">{{ capitalizeFirstLetter(user.roles.map(role => role.name).join(", ")) }}</span>
                 </td>
-                <td>United Kingdom</td>
-                <td>
-                  <span class="legend-indicator bg-success"></span>Active
-                </td>
-                <td>
-                  <div class="d-flex align-items-center">
-                    <span class="fs-5 me-2">72%</span>
-                    <div class="progress table-progress">
-                      <div class="progress-bar" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                  </div>
-                </td>
-                <td>Employee</td>
                 <td>
                   <button type="button" class="btn btn-white btn-sm" data-bs-toggle="modal" data-bs-target="#editUserModal" @click="editUserModal(user);">
-                    <i class="bi-pencil-fill me-1"></i> Edit
+                    <i class="bi-pencil-fill me-1"></i> Bewerken
                   </button>
                 </td>
               </tr>
@@ -613,47 +601,12 @@ function editUserModal(user) {
 
               <div class="col-sm-9">
                 <div class="input-group input-group-sm-vertical">
-                  <!-- Radio Check -->
-                  <label class="form-control">
-                    <span class="form-check">
-                      <input type="radio" class="form-check-input" v-model="detailsForm.accountType" name="userAccountTypeRadio" >
-                      <span class="form-check-label">Planner</span>
-                    </span>
-                  </label>
-                  <!-- End Radio Check -->
 
                   <!-- Radio Check -->
-                  <label class="form-control">
+                  <label class="form-control" v-for="role in roleList" :key="role.id">
                     <span class="form-check">
-                      <input type="radio" class="form-check-input" v-model="detailsForm.accountType" name="userAccountTypeRadio">
-                      <span class="form-check-label">Eigenaar</span>
-                    </span>
-                  </label>
-                  <!-- End Radio Check -->
-
-                  <!-- Radio Check -->
-                  <label class="form-control">
-                    <span class="form-check">
-                      <input type="radio" class="form-check-input" v-model="detailsForm.accountType" name="userAccountTypeRadio">
-                      <span class="form-check-label">Aannemer</span>
-                    </span>
-                  </label>
-                  <!-- End Radio Check -->
-                  
-                  <!-- Radio Check -->
-                  <label class="form-control">
-                    <span class="form-check">
-                      <input type="radio" class="form-check-input" v-model="detailsForm.accountType" name="userAccountTypeRadio">
-                      <span class="form-check-label">Klant</span>
-                    </span>
-                  </label>
-                  <!-- End Radio Check -->
-
-                  <!-- Radio Check -->
-                  <label class="form-control">
-                    <span class="form-check">
-                      <input type="radio" class="form-check-input" v-model="detailsForm.accountType" name="userAccountTypeRadio">
-                      <span class="form-check-label">Admin</span>
+                      <input type="radio" :value="role.id" class="form-check-input" v-model="detailsForm.accountType" name="userAccountTypeRadio">
+                      <span class="form-check-label" v-text="capitalizeFirstLetter(role.name)"></span>
                     </span>
                   </label>
                   <!-- End Radio Check -->

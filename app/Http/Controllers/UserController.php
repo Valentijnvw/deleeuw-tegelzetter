@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
-use App\Http\Requests\UserDetailsUpdateRequest;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
 
@@ -23,7 +24,8 @@ class UserController extends Controller
         });
 
         return Inertia::render('Users/List', [
-            'userList' => $users
+            'userList' => $users,
+            'roleList' => Role::all(),
         ]);
     }
 
@@ -34,26 +36,34 @@ class UserController extends Controller
         ]);
     }
 
-    public function updateDetails(UserDetailsUpdateRequest $request)
+    public function updateDetails(Request $request)
     {
-        dd(Role::all());
+        // Update details
+        $validated = $request->validate([
+            'email' => ['email', 'max:255'],
+        ]);
         $id = $request->id;
         $user = User::findOrFail($id);
-        $user->fill($request->validated());
+        $user->fill($validated);
         $user->save();
+
+        // Update role
+        $roleIds = Role::all()->map(function($role) { return $role->id; });
+        $accountTypeValidated = $request->validate([
+            'accountType' => Rule::in($roleIds),
+        ]);
+        $role = Role::findOrFail($accountTypeValidated["accountType"]);
+        $user->syncRoles($role);
     }
 
     public function updatePassword(Request $request)
     {
 
         $validated = $request->validate([
-            'password' => ['required'],
+            'newPassword' => ['required'],
         ]);
 
-        dd("12345");
-
-        $id = $request->id;
-        $user = User::findOrFail($id);
+        $user = User::findOrFail($request->id);
 
         $user->update([
             'password' => Hash::make($validated['newPassword']),
