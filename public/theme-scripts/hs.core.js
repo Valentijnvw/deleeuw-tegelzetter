@@ -8,7 +8,7 @@
 */
 'use strict';
 
-export const HSCore = {
+const HSCore = {
 	components: {},
 	collection: {
 		tooltips: [],

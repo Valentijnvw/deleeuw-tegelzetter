@@ -36,8 +36,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::prefix('/gebruikers')->group(function () {
-        Route::get('/lijst', [UserController::class, 'list'])->name('user.list');
+        Route::get('/', [UserController::class, 'list'])->name('user.list');
         Route::get('/toevoegen', [UserController::class, 'add'])->name('user.add');
+
+        Route::patch('/bewerken/details', [UserController::class, 'updateDetails'])->name('user.update.details');
+        Route::patch('/bewerken/wachtwoord', [UserController::class, 'updatePassword'])->name('user.update.password');
     });
 });
 

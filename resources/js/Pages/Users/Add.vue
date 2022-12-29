@@ -1,25 +1,54 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/inertia-vue3';
+import { Head, useForm } from '@inertiajs/inertia-vue3';
 import { useIMask  } from 'vue-imask';
-// import { ref } from 'vue';
+import { onMounted } from 'vue';
 
 const props = defineProps({
     
 });
 
-const { el, masked } = useIMask({
-  mask: Number,
-  radix: '.',
+// const { el, masked } = useIMask({
+//   mask: Number,
+//   radix: '.',
+// });
+
+const form = useForm({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    password_confirmation: '',
+    terms: false,
 });
+
+onMounted(() => {
+  new HSStepForm('.js-step-form', {
+    finish: () => {
+      document.getElementById("addUserStepFormProgress").style.display = 'none'
+      document.getElementById("addUserStepProfile").style.display = 'none'
+      document.getElementById("addUserStepBillingAddress").style.display = 'none'
+      document.getElementById("addUserStepConfirmation").style.display = 'none'
+      document.getElementById("successMessageContent").style.display = 'block'
+      scrollToTop('#header');
+      const formContainer = document.getElementById('formContainer')
+    },
+    onNextStep: function () {
+      scrollToTop()
+    },
+    onPrevStep: function () {
+      scrollToTop()
+    }
+  })
+  
+})
+
 
 </script>
 
 <template>
     <AuthenticatedLayout>
     <!-- Step Form -->
-    <input
-    ref="el">
     <form class="js-step-form py-md-5" data-hs-step-form-options='{
               "progressSelector": "#addUserStepFormProgress",
               "stepsSelector": "#addUserStepFormContent",
@@ -36,18 +65,7 @@ const { el, masked } = useIMask({
                   }'>
                   <span class="step-icon step-icon-soft-dark">1</span>
                   <div class="step-content">
-                    <span class="step-title">Profile</span>
-                  </div>
-                </a>
-              </li>
-
-              <li class="step-item">
-                <a class="step-content-wrapper" href="javascript:;" data-hs-step-form-next-options='{
-                    "targetSelector": "#addUserStepBillingAddress"
-                  }'>
-                  <span class="step-icon step-icon-soft-dark">2</span>
-                  <div class="step-content">
-                    <span class="step-title">Billing address</span>
+                    <span class="step-title">Gegevens</span>
                   </div>
                 </a>
               </li>
@@ -56,9 +74,9 @@ const { el, masked } = useIMask({
                 <a class="step-content-wrapper" href="javascript:;" data-hs-step-form-next-options='{
                     "targetSelector": "#addUserStepConfirmation"
                   }'>
-                  <span class="step-icon step-icon-soft-dark">3</span>
+                  <span class="step-icon step-icon-soft-dark">2</span>
                   <div class="step-content">
-                    <span class="step-title">Confirmation</span>
+                    <span class="step-title">Bevestiging</span>
                   </div>
                 </a>
               </li>
@@ -78,8 +96,8 @@ const { el, masked } = useIMask({
 
                     <div class="col-sm-9">
                       <div class="input-group input-group-sm-vertical">
-                        <input type="text" class="form-control" name="firstName" id="firstNameLabel" placeholder="Voornaam">
-                        <input type="text" class="form-control" name="lastName" id="lastNameLabel" placeholder="Achternaam">
+                        <input type="text" v-model="form.firstName" class="form-control" name="firstName" id="firstNameLabel" placeholder="Voornaam">
+                        <input type="text" v-model="form.lastName" class="form-control" name="lastName" id="lastNameLabel" placeholder="Achternaam">
                       </div>
                     </div>
                   </div>
@@ -90,7 +108,7 @@ const { el, masked } = useIMask({
                     <label for="emailLabel" class="col-sm-3 col-form-label form-label">Email</label>
 
                     <div class="col-sm-9">
-                      <input type="email" class="form-control" name="email" id="emailLabel" placeholder="E-mailadres">
+                      <input type="email" v-model="form.email" class="form-control" name="email" id="emailLabel" placeholder="E-mailadres">
                     </div>
                   </div>
                   <!-- End Form -->
@@ -101,86 +119,13 @@ const { el, masked } = useIMask({
                           "container": "#addPhoneFieldContainer",
                           "defaultCreated": 0
                         }'>
-                    <label for="phoneLabel" class="col-sm-3 col-form-label form-label">Phone <span class="form-label-secondary">(Optional)</span></label>
+                    <label for="phoneLabel" class="col-sm-3 col-form-label form-label">Telefoonnummer</label>
 
                     <div class="col-sm-9">
                       <div class="input-group input-group-sm-vertical">
-                        <input type="text" class="js-input-mask form-control" name="phone" id="phoneLabel" placeholder="+x(xxx)xxx-xx-xx" aria-label="+x(xxx)xxx-xx-xx" data-hs-mask-options='{
-                                 "mask": "+0(000)000-00-00"
-                               }'>
+                        <input type="text" v-model="form.phone" class="js-input-mask form-control" name="phone" id="phoneLabel" placeholder="Telefoonnummer (bijv. 0612345678)">
 
                       </div>
-
-                      <!-- Container For Input Field -->
-                      <div id="addPhoneFieldContainer"></div>
-
-                      <a class="js-create-field form-link" href="javascript:;">
-                        <i class="bi-plus"></i> Add phone
-                      </a>
-                    </div>
-                  </div>
-                  <!-- End Form -->
-
-                  <!-- Add Phone Input Field -->
-                  <div id="addAddressFieldTemplate" style="display: none;">
-                    <div class="input-group-add-field">
-                      <input type="text" class="form-control" data-name="addressLine" placeholder="Your address" aria-label="Your address">
-
-                      <a class="js-delete-field input-group-add-field-delete" href="javascript:;">
-                        <i class="bi-x-lg"></i>
-                      </a>
-                    </div>
-                  </div>
-                  <!-- End Add Phone Input Field -->
-
-                  <!-- Add Phone Input Field -->
-                  <div id="addPhoneFieldTemplate" class="input-group-add-field" style="display: none;">
-                    <div class="input-group input-group-sm-vertical align-items-center">
-                      <input type="text" class="js-input-mask form-control" data-name="additionlPhone" placeholder="+x(xxx)xxx-xx-xx" aria-label="+x(xxx)xxx-xx-xx" data-hs-mask-options='{
-                               "mask": "+0(000)000-00-00"
-                             }'>
-
-                      <div class="input-group-append">
-                        <!-- Select -->
-                        <div class="tom-select-custom tom-select-custom-end">
-                          <select class="js-select-dynamic form-select" autocomplete="off" data-name="phoneSelect" data-hs-tom-select-options='{
-                                    "searchInDropdown": false,
-                                    "hideSearch": true,
-                                    "dropdownWidth": "8rem"
-                                  }'>
-                            <option value="Mobile" selected>Mobile</option>
-                            <option value="Home">Home</option>
-                            <option value="Work">Work</option>
-                            <option value="Fax">Fax</option>
-                            <option value="Direct">Direct</option>
-                          </select>
-                        </div>
-                        <!-- End Select -->
-                      </div>
-                    </div>
-
-                    <a class="js-delete-field input-group-add-field-delete" href="javascript:;">
-                      <i class="bi-x-lg"></i>
-                    </a>
-                  </div>
-                  <!-- End Add Phone Input Field -->
-
-                  <!-- Form -->
-                  <div class="row mb-4">
-                    <label for="organizationLabel" class="col-sm-3 col-form-label form-label">Organization</label>
-
-                    <div class="col-sm-9">
-                      <input type="text" class="form-control" name="organization" id="organizationLabel" placeholder="Htmlstream" aria-label="Htmlstream">
-                    </div>
-                  </div>
-                  <!-- End Form -->
-
-                  <!-- Form -->
-                  <div class="row mb-4">
-                    <label for="departmentLabel" class="col-sm-3 col-form-label form-label">Department</label>
-
-                    <div class="col-sm-9">
-                      <input type="text" class="form-control" name="department" id="departmentLabel" placeholder="Human resources" aria-label="Human resources">
                     </div>
                   </div>
                   <!-- End Form -->
@@ -195,7 +140,7 @@ const { el, masked } = useIMask({
                         <label class="form-control" for="userAccountTypeRadio1">
                           <span class="form-check">
                             <input type="radio" class="form-check-input" name="userAccountTypeRadio" id="userAccountTypeRadio1">
-                            <span class="form-check-label">Individual</span>
+                            <span class="form-check-label">Planner</span>
                           </span>
                         </label>
                         <!-- End Radio Check -->
@@ -204,7 +149,34 @@ const { el, masked } = useIMask({
                         <label class="form-control" for="userAccountTypeRadio2">
                           <span class="form-check">
                             <input type="radio" class="form-check-input" name="userAccountTypeRadio" id="userAccountTypeRadio2">
-                            <span class="form-check-label">Company</span>
+                            <span class="form-check-label">Eigenaar</span>
+                          </span>
+                        </label>
+                        <!-- End Radio Check -->
+
+                        <!-- Radio Check -->
+                        <label class="form-control" for="userAccountTypeRadio2">
+                          <span class="form-check">
+                            <input type="radio" class="form-check-input" name="userAccountTypeRadio" id="userAccountTypeRadio2">
+                            <span class="form-check-label">Aannemer</span>
+                          </span>
+                        </label>
+                        <!-- End Radio Check -->
+                        
+                        <!-- Radio Check -->
+                        <label class="form-control" for="userAccountTypeRadio2">
+                          <span class="form-check">
+                            <input type="radio" class="form-check-input" name="userAccountTypeRadio" id="userAccountTypeRadio2">
+                            <span class="form-check-label">Klant</span>
+                          </span>
+                        </label>
+                        <!-- End Radio Check -->
+
+                        <!-- Radio Check -->
+                        <label class="form-control" for="userAccountTypeRadio2">
+                          <span class="form-check">
+                            <input type="radio" class="form-check-input" name="userAccountTypeRadio" id="userAccountTypeRadio2">
+                            <span class="form-check-label">Admin</span>
                           </span>
                         </label>
                         <!-- End Radio Check -->
@@ -218,7 +190,7 @@ const { el, masked } = useIMask({
                 <!-- Footer -->
                 <div class="card-footer d-flex justify-content-end align-items-center">
                   <button type="button" class="btn btn-primary" data-hs-step-form-next-options='{
-                            "targetSelector": "#addUserStepBillingAddress"
+                            "targetSelector": "#addUserStepConfirmation"
                           }'>
                     Next <i class="bi-chevron-right"></i>
                   </button>
@@ -226,92 +198,6 @@ const { el, masked } = useIMask({
                 <!-- End Footer -->
               </div>
               <!-- End Card -->
-
-              <div id="addUserStepBillingAddress" class="card card-lg" style="display: none;">
-                <!-- Body -->
-                <div class="card-body">
-                  <!-- Form -->
-                  <div class="row mb-4">
-                    <label for="locationLabel" class="col-sm-3 col-form-label form-label">Location</label>
-
-                    <div class="col-sm-9">
-                      <!-- Select -->
-                      <div class="tom-select-custom mb-4">
-                      </div>
-                      <!-- End Select -->
-
-                      <div class="mb-4">
-                        <input type="text" class="form-control" name="city" id="cityLabel" placeholder="City" aria-label="City">
-                      </div>
-
-                      <input type="text" class="form-control" name="state" id="stateLabel" placeholder="State" aria-label="State">
-                    </div>
-                  </div>
-                  <!-- End Form -->
-
-                  <!-- Form -->
-                  <div class="row mb-4">
-                    <label for="addressLine1Label" class="col-sm-3 col-form-label form-label">Address line 1</label>
-
-                    <div class="col-sm-9">
-                      <input type="text" class="form-control" name="addressLine1" id="addressLine1Label" placeholder="Your address" aria-label="Your address">
-                    </div>
-                  </div>
-                  <!-- End Form -->
-
-                  <!-- Form -->
-                  <div class="js-add-field row mb-4" data-hs-add-field-options='{
-                          "template": "#addAddressFieldTemplate",
-                          "container": "#addAddressFieldContainer",
-                          "defaultCreated": 0
-                        }'>
-                    <label for="addressLine2Label" class="col-sm-3 col-form-label form-label">Address line 2 <span class="form-label-secondary">(Optional)</span></label>
-
-                    <div class="col-sm-9">
-                      <input type="text" class="form-control" name="addressLine2" id="addressLine2Label" placeholder="Your address" aria-label="Your address">
-
-                      <!-- Container For Input Field -->
-                      <div id="addAddressFieldContainer"></div>
-
-                      <a href="javascript:;" class="js-create-field form-link">
-                        <i class="bi-plus"></i> Add address
-                      </a>
-                    </div>
-                  </div>
-                  <!-- End Form -->
-
-                  <!-- Form -->
-                  <div class="row">
-                    <label for="zipCodeLabel" class="col-sm-3 col-form-label form-label">Zip code <i class="bi-question-circle text-body ms-1" data-bs-toggle="tooltip" data-bs-placement="top" title="You can find your code in a postal address."></i></label>
-
-                    <div class="col-sm-9">
-                      <input type="text" class="js-input-mask form-control" name="zipCode" id="zipCodeLabel" placeholder="Your zip code" aria-label="Your zip code" data-hs-mask-options='{
-                               "mask": "AA0 0AA"
-                             }'>
-                    </div>
-                  </div>
-                  <!-- End Form -->
-                </div>
-                <!-- End Body -->
-
-                <!-- Footer -->
-                <div class="card-footer d-flex align-items-center">
-                  <button type="button" class="btn btn-ghost-secondary" data-hs-step-form-prev-options='{
-                       "targetSelector": "#addUserStepProfile"
-                     }'>
-                    <i class="bi-chevron-left"></i> Previous step
-                  </button>
-
-                  <div class="ms-auto">
-                    <button type="button" class="btn btn-primary" data-hs-step-form-next-options='{
-                              "targetSelector": "#addUserStepConfirmation"
-                            }'>
-                      Next <i class="bi-chevron-right"></i>
-                    </button>
-                  </div>
-                </div>
-                <!-- End Footer -->
-              </div>
 
               <div id="addUserStepConfirmation" class="card card-lg" style="display: none;">
                 <!-- Profile Cover -->
@@ -332,37 +218,19 @@ const { el, masked } = useIMask({
                 <div class="card-body">
                   <dl class="row">
                     <dt class="col-sm-6 text-sm-end">Full name:</dt>
-                    <dd class="col-sm-6">Ella Lauda</dd>
+                    <dd class="col-sm-6" v-text="form.firstName + ' ' + form.lastName"></dd>
 
                     <dt class="col-sm-6 text-sm-end">Email:</dt>
-                    <dd class="col-sm-6">ella@site.com</dd>
+                    <dd class="col-sm-6" v-text="form.email"></dd>
 
-                    <dt class="col-sm-6 text-sm-end">Phone:</dt>
-                    <dd class="col-sm-6">+1 (609) 972-22-22</dd>
-
-                    <dt class="col-sm-6 text-sm-end">Organization:</dt>
-                    <dd class="col-sm-6">Htmlstream</dd>
+                    <dt class="col-sm-6 text-sm-end">Telefoonnummer:</dt>
+                    <dd class="col-sm-6" v-text="form.phone"></dd>
 
                     <dt class="col-sm-6 text-sm-end">Department:</dt>
                     <dd class="col-sm-6">-</dd>
 
                     <dt class="col-sm-6 text-sm-end">Account type:</dt>
                     <dd class="col-sm-6">Individual</dd>
-
-                    <dt class="col-sm-6 text-sm-end">City:</dt>
-                    <dd class="col-sm-6">London</dd>
-
-                    <dt class="col-sm-6 text-sm-end">State:</dt>
-                    <dd class="col-sm-6">-</dd>
-
-                    <dt class="col-sm-6 text-sm-end">Address line 1:</dt>
-                    <dd class="col-sm-6">45 Roker Terrace, Latheronwheel</dd>
-
-                    <dt class="col-sm-6 text-sm-end">Address line 2:</dt>
-                    <dd class="col-sm-6">-</dd>
-
-                    <dt class="col-sm-6 text-sm-end">Zip code:</dt>
-                    <dd class="col-sm-6">KW5 8NW</dd>
                   </dl>
                   <!-- End Row -->
                 </div>
@@ -371,14 +239,13 @@ const { el, masked } = useIMask({
                 <!-- Footer -->
                 <div class="card-footer d-sm-flex align-items-sm-center">
                   <button type="button" class="btn btn-ghost-secondary mb-2 mb-sm-0" data-hs-step-form-prev-options='{
-                       "targetSelector": "#addUserStepBillingAddress"
+                       "targetSelector": "#addUserStepProfile"
                      }'>
-                    <i class="bi-chevron-left"></i> Previous step
+                    <i class="bi-chevron-left"></i> Vorige stap
                   </button>
 
                   <div class="ms-auto">
-                    <button type="button" class="btn btn-white me-2">Save in drafts</button>
-                    <button id="addUserFinishBtn" type="button" class="btn btn-primary">Add user</button>
+                    <button id="addUserFinishBtn" type="button" class="btn btn-primary">Gebruiker toevoegen</button>
                   </div>
                 </div>
                 <!-- End Footer -->

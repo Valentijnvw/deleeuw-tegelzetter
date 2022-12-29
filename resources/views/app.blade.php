@@ -93,9 +93,10 @@
 }
         </script>
 
-        <script type="text/javascript" src="/theme-scripts/hs.core.js"></script>
+        {{-- <script type="text/javascript" src="/theme-scripts/hs.core.js"></script> --}}
         <script type="text/javascript" src="/theme-scripts/theme.min.js"></script>
         <script type="text/javascript" src="/theme-scripts/hs-mega-menu.js"></script>
+        <script type="text/javascript" src="/theme-scripts/hs-step-form.js"></script>
 
         <!-- Scripts -->
         @routes

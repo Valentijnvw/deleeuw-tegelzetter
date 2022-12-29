@@ -1,10 +1,21 @@
-import './bootstrap';
-import '../css/theme.min.css';
-import '../../node_modules/bootstrap-icons/font/bootstrap-icons.css';
+// jQuery
+import '../../node_modules/jquery/dist/jquery.min.js';
+import '../../node_modules/jquery-migrate/dist/jquery-migrate.min.js'
+
+// Bootstrap
 import '../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js';
 
+// Appear
+// import '../../node_modules/appear/dist/appear.js';
+
+// Theme CSS
+import '../css/theme.min.css';
 import '../css/theme/hs-mega-menu.css';
 
+// Bootstrap icons
+import '../../node_modules/bootstrap-icons/font/bootstrap-icons.css';
+
+// Vue / inertia components
 import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/inertia-vue3';
 import { InertiaProgress } from '@inertiajs/progress';
