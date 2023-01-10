@@ -5,12 +5,14 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import WachtwoordInput from '@/Components/WachtwoordInput.vue';
 import LoginLayout from '@/Layouts/LoginLayout.vue';
 import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
 
-defineProps({
+const props = defineProps({
     canResetPassword: Boolean,
     status: String,
+    errors: Object,
 });
 
 const form = useForm({
@@ -55,14 +57,14 @@ const submit = () => {
               </span>
             </label>
 
-            <div class="input-group input-group-merge" data-hs-validation-validate-class>
-              <input type="password" v-model="form.password" class="js-toggle-password form-control form-control-lg" name="password" id="signupSrPassword" placeholder="Uw wachtwoord">
-              <a id="changePassTarget" class="input-group-append input-group-text" href="javascript:;">
-                <i id="changePassIcon" class="bi-eye"></i>
-              </a>
-            </div>
+            <WachtwoordInput
+              name="password"
+              v-model="form.password"
+              placeholder="Uw wachtwoord"
+              :error="props.errors.email"
+            />
 
-            <span class="invalid-feedback">Please enter a valid password.</span>
+
           </div>
           <!-- End Form -->
 

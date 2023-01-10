@@ -17,12 +17,12 @@ return new class extends Migration
             $table->id();
             $table->text('company_name');
             $table->text('adress');
-            $table->text('city');
-            $table->text('zip');
-            $table->unsignedMediumInteger('kvk');
-            $table->text('btw_id');
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            // $table->text('city');
+            // $table->text('zip');
+            // $table->unsignedMediumInteger('kvk');
+            // $table->text('btw_id');
+            // $table->unsignedBigInteger('user_id');
+            // $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

@@ -40,6 +40,8 @@ class UserController extends Controller
     {
         // Update details
         $validated = $request->validate([
+            'first_name' => [],
+            'last_name' => [],
             'email' => ['email', 'max:255'],
         ]);
         $id = $request->id;
@@ -61,6 +63,7 @@ class UserController extends Controller
 
         $validated = $request->validate([
             'newPassword' => ['required'],
+            'confirmPassword' => 'same:newPassword',
         ]);
 
         $user = User::findOrFail($request->id);
@@ -69,5 +72,13 @@ class UserController extends Controller
             'password' => Hash::make($validated['newPassword']),
         ]);
         $user->save();
+    }
+
+    public function delete(Request $request) {
+        $validated = $request->validate([
+            'confirmed' => ['accepted'],
+            'id' => []
+        ]);
+        dd($validated);
     }
 }

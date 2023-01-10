@@ -1,13 +1,15 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Modal from '@/Components/Modal.vue';
-import { Head, useForm } from '@inertiajs/inertia-vue3';
+import WachtwoordInput from '@/Components/WachtwoordInput.vue';
+import Table from '@/Components/Table.vue';
+import { Head, useForm, usePage } from '@inertiajs/inertia-vue3';
 import { ref } from 'vue';
 import { capitalizeFirstLetter } from '@/util/stringUtils';
-
 const props = defineProps({
     userList: Array,
     roleList: Array,
+    errors: Object,
 });
 
 const editingUser = ref(null);
@@ -15,14 +17,16 @@ const editingUser = ref(null);
 // Details modal form
 const detailsForm = useForm({
   id: '',
-  firstName: '',
-  lastName: '',
+  first_name: '',
+  last_name: '',
   email: '',
   phone: '',
   accountType: '',
 });
 const submitDetailsForm = () => {
-    detailsForm.patch(route('user.update.details'));
+    detailsForm.patch(route('user.update.details'), {
+      onSuccess: () => $("#editUserModal").modal("hide"),
+    })
 };
 
 // Edit password modal form
@@ -30,9 +34,19 @@ const showPassword = ref(false);
 const passwordForm = useForm({
   id: '',
   newPassword: '',
+  confirmPassword: '',
 });
 const submitPasswordForm = () => {
   passwordForm.patch(route('user.update.password'));
+};
+
+// Delete user modal form
+const deleteUserForm = useForm({
+  id: '',
+  confirmed: false,
+});
+const submitDeleteUserForm = () => {
+  deleteUserForm.post(route('user.delete'));
 };
 
 // Edit user button
@@ -42,12 +56,14 @@ function editUserModal(user) {
   editingUser.value = user;
 
   detailsForm.id = user.id;
-  detailsForm.firstName = user.first_name;
-  detailsForm.lastName = user.last_name;
+  detailsForm.first_name = user.first_name;
+  detailsForm.last_name = user.last_name;
   detailsForm.email = user.email;
   detailsForm.accountType = user.roles[0].id;
 
   passwordForm.id = user.id;
+
+  deleteUserForm.id = user.id;
 };
 
 </script>
@@ -185,214 +201,9 @@ function editUserModal(user) {
 
       <!-- Card -->
       <div class="card">
-        <!-- Header -->
-        <div class="card-header card-header-content-md-between">
-          <div class="mb-2 mb-md-0">
-            <form>
-              <!-- Search -->
-              <div class="input-group input-group-merge input-group-flush">
-                <div class="input-group-prepend input-group-text">
-                  <i class="bi-search"></i>
-                </div>
-                <input id="datatableSearch" type="search" class="form-control" placeholder="Search users" aria-label="Search users">
-              </div>
-              <!-- End Search -->
-            </form>
-          </div>
-
-          <div class="d-grid d-sm-flex justify-content-md-end align-items-sm-center gap-2">
-            <!-- Datatable Info -->
-            <div id="datatableCounterInfo" style="display: none;">
-              <div class="d-flex align-items-center">
-                <span class="fs-5 me-3">
-                  <span id="datatableCounter">0</span>
-                  Selected
-                </span>
-                <a class="btn btn-outline-danger btn-sm" href="javascript:;">
-                  <i class="bi-trash"></i> Delete
-                </a>
-              </div>
-            </div>
-            <!-- End Datatable Info -->
-
-            <!-- Dropdown -->
-            <div class="dropdown">
-              <button type="button" class="btn btn-white btn-sm dropdown-toggle w-100" id="usersExportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi-download me-2"></i> Export
-              </button>
-
-              <div class="dropdown-menu dropdown-menu-sm-end" aria-labelledby="usersExportDropdown">
-                <span class="dropdown-header">Options</span>
-                <a id="export-copy" class="dropdown-item" href="javascript:;">
-                  <img class="avatar avatar-xss avatar-4x3 me-2" src="../../../svg/illustrations/copy-icon.svg" alt="Image Description">
-                  Copy
-                </a>
-                <a id="export-print" class="dropdown-item" href="javascript:;">
-                  <img class="avatar avatar-xss avatar-4x3 me-2" src="../../../svg/illustrations/print-icon.svg" alt="Image Description">
-                  Print
-                </a>
-                <div class="dropdown-divider"></div>
-                <span class="dropdown-header">Download options</span>
-                <a id="export-excel" class="dropdown-item" href="javascript:;">
-                  <img class="avatar avatar-xss avatar-4x3 me-2" src="../../../svg/brands/excel-icon.svg" alt="Image Description">
-                  Excel
-                </a>
-                <a id="export-csv" class="dropdown-item" href="javascript:;">
-                  <img class="avatar avatar-xss avatar-4x3 me-2" src="../../../svg/components/placeholder-csv-format.svg" alt="Image Description">
-                  .CSV
-                </a>
-                <a id="export-pdf" class="dropdown-item" href="javascript:;">
-                  <img class="avatar avatar-xss avatar-4x3 me-2" src="../../../svg/brands/pdf-icon.svg" alt="Image Description">
-                  PDF
-                </a>
-              </div>
-            </div>
-            <!-- End Dropdown -->
-
-            <!-- Dropdown -->
-            <div class="dropdown">
-              <button type="button" class="btn btn-white btn-sm w-100" id="usersFilterDropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-                <i class="bi-filter me-1"></i> Filter <span class="badge bg-soft-dark text-dark rounded-circle ms-1">2</span>
-              </button>
-
-              <div class="dropdown-menu dropdown-menu-sm-end dropdown-card card-dropdown-filter-centered" aria-labelledby="usersFilterDropdown" style="min-width: 22rem;">
-                <!-- Card -->
-                <div class="card">
-                  <div class="card-header card-header-content-between">
-                    <h5 class="card-header-title">Filter users</h5>
-
-                    <!-- Toggle Button -->
-                    <button type="button" class="btn btn-ghost-secondary btn-icon btn-sm ms-2">
-                      <i class="bi-x-lg"></i>
-                    </button>
-                    <!-- End Toggle Button -->
-                  </div>
-
-                  <div class="card-body">
-                    <form>
-                      <div class="mb-4">
-                        <small class="text-cap text-body">Role</small>
-
-                        <div class="row">
-                          <div class="col">
-                            <!-- Check -->
-                            <div class="form-check">
-                              <input class="form-check-input" type="checkbox" value="" id="usersFilterCheckAll" checked>
-                              <label class="form-check-label" for="usersFilterCheckAll">
-                                All
-                              </label>
-                            </div>
-                            <!-- End Check -->
-                          </div>
-                          <!-- End Col -->
-
-                          <div class="col">
-                            <!-- Check -->
-                            <div class="form-check">
-                              <input class="form-check-input" type="checkbox" value="" id="usersFilterCheckEmployee">
-                              <label class="form-check-label" for="usersFilterCheckEmployee">
-                                Employee
-                              </label>
-                            </div>
-                            <!-- End Check -->
-                          </div>
-                          <!-- End Col -->
-                        </div>
-                        <!-- End Row -->
-                      </div>
-
-                      <div class="row">
-                        <div class="col-sm mb-4">
-                          <small class="text-cap text-body">Position</small>
-
-                          <!-- Select -->
-                          <div class="tom-select-custom">
-                            <select class="js-select js-datatable-filter form-select form-select-sm" data-target-column-index="2" data-hs-tom-select-options='{
-                                      "placeholder": "Any",
-                                      "searchInDropdown": false,
-                                      "hideSearch": true,
-                                      "dropdownWidth": "10rem"
-                                    }'>
-                              <option value="">Any</option>
-                              <option value="Accountant">Accountant</option>
-                              <option value="Co-founder">Co-founder</option>
-                              <option value="Designer">Designer</option>
-                              <option value="Developer">Developer</option>
-                              <option value="Director">Director</option>
-                            </select>
-                            <!-- End Select -->
-                          </div>
-                        </div>
-                        <!-- End Col -->
-
-                        <div class="col-sm mb-4">
-                          <small class="text-cap text-body">Status</small>
-
-                          <!-- Select -->
-                          <div class="tom-select-custom">
-                            <select class="js-select js-datatable-filter form-select form-select-sm" data-target-column-index="4" data-hs-tom-select-options='{
-                                      "placeholder": "Any status",
-                                      "searchInDropdown": false,
-                                      "hideSearch": true,
-                                      "dropdownWidth": "10rem"
-                                    }'>
-                              <option value="">Any status</option>
-                              <option value="Completed" data-option-template='<span class="d-flex align-items-center"><span class="legend-indicator bg-success"></span>Completed</span>'>Completed</option>
-                              <option value="In progress" data-option-template='<span class="d-flex align-items-center"><span class="legend-indicator bg-warning"></span>In progress</span>'>In progress</option>
-                              <option value="To do" data-option-template='<span class="d-flex align-items-center"><span class="legend-indicator bg-danger"></span>To do</span>'>To do</option>
-                            </select>
-                          </div>
-                          <!-- End Select -->
-                        </div>
-                        <!-- End Col -->
-
-                        <div class="col-12 mb-4">
-                          <span class="text-cap text-body">Location</span>
-
-                          <!-- Select -->
-                          <div class="tom-select-custom">
-                          
-                          </div>
-                          <!-- End Select -->
-                        </div>
-                        <!-- End Col -->
-                      </div>
-                      <!-- End Row -->
-
-                      <div class="d-grid">
-                        <a class="btn btn-primary" href="javascript:;">Apply</a>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-                <!-- End Card -->
-              </div>
-            </div>
-            <!-- End Dropdown -->
-          </div>
-        </div>
-        <!-- End Header -->
-
-        <!-- Table -->
-        <div class="table-responsive datatable-custom position-relative">
-          <table id="datatable" class="table table-lg table-borderless table-thead-bordered table-nowrap table-align-middle card-table" data-hs-datatables-options='{
-                   "columnDefs": [{
-                      "targets": [0, 7],
-                      "orderable": false
-                    }],
-                   "order": [],
-                   "info": {
-                     "totalQty": "#datatableWithPaginationInfoTotalQty"
-                   },
-                   "search": "#datatableSearch",
-                   "entries": "#datatableEntries",
-                   "pageLength": 15,
-                   "isResponsive": false,
-                   "isShowPaging": false,
-                   "pagination": "datatablePagination"
-                 }'>
-            <thead class="thead-light">
-              <tr>
+        <Table>
+          <template #head>
+            <tr>
                 <th class="table-column-pe-0">
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" value="" id="datatableCheckAll">
@@ -403,81 +214,38 @@ function editUserModal(user) {
                 <th>Account type</th>
                 <th></th>
               </tr>
-            </thead>
-
-            <tbody>
-
-              <tr v-for="user in userList" :key="user.id">
-                <td class="table-column-pe-0">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="datatableCheckAll1">
-                    <label class="form-check-label" for="datatableCheckAll1"></label>
-                  </div>
-                </td>
-                <td class="table-column-ps-0">
-                  <span class="d-flex align-items-center">
-                    <div class="avatar avatar-circle">
-                      <img class="avatar-img" src="../../../img/160x160/img10.jpg" alt="Image Description">
-                    </div>
-                    <div class="ms-3">
-                      <span class="d-block h5 text-inherit mb-0">{{ user.first_name + " " + user.last_name }}</span>
-                      <span class="d-block fs-5 text-body">{{ user.email }}</span>
-                    </div>
-                  </span>
-                </td>
-                <td>
-                  <span class="d-block h5 mb-0">{{ capitalizeFirstLetter(user.roles.map(role => role.name).join(", ")) }}</span>
-                </td>
-                <td>
-                  <button type="button" class="btn btn-white btn-sm" data-bs-toggle="modal" data-bs-target="#editUserModal" @click="editUserModal(user);">
-                    <i class="bi-pencil-fill me-1"></i> Bewerken
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <!-- End Table -->
-
-        <!-- Footer -->
-        <div class="card-footer">
-          <div class="row justify-content-center justify-content-sm-between align-items-sm-center">
-            <div class="col-sm mb-2 mb-sm-0">
-              <div class="d-flex justify-content-center justify-content-sm-start align-items-center">
-                <span class="me-2">Showing:</span>
-
-                <!-- Select -->
-                <div class="tom-select-custom">
-                  <select id="datatableEntries" class="js-select form-select form-select-borderless w-auto" autocomplete="off" data-hs-tom-select-options='{
-                            "searchInDropdown": false,
-                            "hideSearch": true
-                          }'>
-                    <option value="10">10</option>
-                    <option value="15" selected>15</option>
-                    <option value="20">20</option>
-                  </select>
+          </template>
+          <template #body>
+            <tr v-for="user in userList" :key="user.id">
+              <td class="table-column-pe-0">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="" id="datatableCheckAll1">
+                  <label class="form-check-label" for="datatableCheckAll1"></label>
                 </div>
-                <!-- End Select -->
+              </td>
+              <td class="table-column-ps-0">
+                <span class="d-flex align-items-center">
+                  <div class="avatar avatar-circle">
+                    <img class="avatar-img" src="../../../img/160x160/img10.jpg" alt="Image Description">
+                  </div>
+                  <div class="ms-3">
+                    <span class="d-block h5 text-inherit mb-0">{{ user.first_name + " " + user.last_name }}</span>
+                    <span class="d-block fs-5 text-body">{{ user.email }}</span>
+                  </div>
+                </span>
+              </td>
+              <td>
+                <span class="d-block h5 mb-0">{{ capitalizeFirstLetter(user.roles.map(role => role.name).join(", ")) }}</span>
+              </td>
+              <td>
+                <button type="button" class="btn btn-white btn-sm" data-bs-toggle="modal" data-bs-target="#editUserModal" @click="editUserModal(user);">
+                  <i class="bi-pencil-fill me-1"></i> Bewerken
+                </button>
+              </td>
+            </tr>
+          </template>
 
-                <span class="text-secondary me-2">of</span>
-
-                <!-- Pagination Quantity -->
-                <span id="datatableWithPaginationInfoTotalQty"></span>
-              </div>
-            </div>
-            <!-- End Col -->
-
-            <div class="col-sm-auto">
-              <div class="d-flex justify-content-center justify-content-sm-end">
-                <!-- Pagination -->
-                <nav id="datatablePagination" aria-label="Activity pagination"></nav>
-              </div>
-            </div>
-            <!-- End Col -->
-          </div>
-          <!-- End Row -->
-        </div>
-        <!-- End Footer -->
+        </Table>
       </div>
       <!-- End Card -->
     </AuthenticatedLayout>
@@ -513,6 +281,11 @@ function editUserModal(user) {
           <li class="nav-item">
             <a class="nav-link" href="#change-password" id="change-password-tab" data-bs-toggle="tab" data-bs-target="#change-password" role="tab" aria-selected="false">
               <i class="bi-shield-lock me-1"></i> Wachtwoord veranderen
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#delete-account" id="delete-account-tab" data-bs-toggle="tab" data-bs-target="#delete-account" role="tab" aria-selected="false">
+              <i class="bi-trash me-1"></i> Account verwijderen
             </a>
           </li>
         </ul>
@@ -561,8 +334,8 @@ function editUserModal(user) {
 
               <div class="col-sm-9">
                 <div class="input-group input-group-sm-vertical">
-                  <input type="text" v-model="detailsForm.firstName" class="form-control" name="firstName" id="firstNameLabel" placeholder="Voornaam">
-                  <input type="text" v-model="detailsForm.lastName" class="form-control" name="lastName" id="lastNameLabel" placeholder="Achternaam">
+                  <input type="text" v-model="detailsForm.first_name" class="form-control" name="firstName" id="firstNameLabel" placeholder="Voornaam">
+                  <input type="text" v-model="detailsForm.last_name" class="form-control" name="lastName" id="lastNameLabel" placeholder="Achternaam">
                 </div>
               </div>
             </div>
@@ -724,11 +497,13 @@ function editUserModal(user) {
             <!-- Form -->
             <div class="row mb-4">
               <label class="col-sm-3 col-form-label form-label">Nieuw wachtwoord</label>
-
               <div class="col-sm-9">
-                <input v-model="passwordForm.newPassword" :type="showPassword ? 'text' : 'password'" class="js-toggle-password form-control" name="newPassword" placeholder="Nieuw wachtwoord" aria-label="Enter new password" data-hs-toggle-password-options='{
-                            "target": "#editUserModalChangePassModalCheckbox"
-                          }'>
+                <WachtwoordInput
+                  name="newPassword"
+                  v-model="passwordForm.newPassword"
+                  placeholder="Uw wachtwoord"
+                  :error="props.errors.newPassword"
+                />
               </div>
             </div>
             <!-- End Form -->
@@ -737,23 +512,39 @@ function editUserModal(user) {
             <div class="row mb-4">
               <label class="col-sm-3 col-form-label form-label">Herhaal nieuw wachtwoord</label>
 
+              
               <div class="col-sm-9">
-                <input type="password" class="js-toggle-password form-control" name="confirmNewPassword" placeholder="Herhaal nieuw wachtwoord" data-hs-toggle-password-options='{
-                            "target": "#editUserModalChangePassModalCheckbox"
-                          }'>
+                <WachtwoordInput
+                  name="confirmNewPassword"
+                  v-model="passwordForm.confirmPassword"
+                  placeholder="Bevestig wachtwoord"
+                  :error="props.errors.confirmPassword"
+                />
               </div>
             </div>
             <!-- End Form -->
 
+            <div class="d-flex justify-content-end">
+              <div class="d-flex gap-3">
+                <button type="button" class="btn btn-white" data-bs-dismiss="modal" aria-label="Close">Annuleren</button>
+                <button type="submit" class="btn btn-primary" :class="{ 'opacity-25': detailsForm.processing }" :disabled="detailsForm.processing">Opslaan</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="tab-pane fade" id="delete-account" role="tabpanel" aria-labelledby="delete-account-tab">
+          <form @submit.prevent="submitDeleteUserForm">
             <!-- Form -->
             <div class="row mb-4">
               <div class="col-sm-9 offset-sm-3">
                 <!-- Form Check -->
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="" v-model="showPassword">
+                  <input class="form-check-input" :class="{'is-invalid': props.errors.confirmed ? true : false}" type="checkbox" name="confirmed" v-model="deleteUserForm.confirmed">
                   <label class="form-check-label">
-                    Wachtwoord tonen
+                    Keuze bevestigen
                   </label>
+                  <span class="invalid-feedback" v-show="props.errors.confirmed ? true : false">Dit veld is verplicht</span>
                 </div>
                 <!-- End Form Check -->
               </div>
@@ -763,7 +554,7 @@ function editUserModal(user) {
             <div class="d-flex justify-content-end">
               <div class="d-flex gap-3">
                 <button type="button" class="btn btn-white" data-bs-dismiss="modal" aria-label="Close">Annuleren</button>
-                <button type="submit" class="btn btn-primary" :class="{ 'opacity-25': detailsForm.processing }" :disabled="detailsForm.processing">Opslaan</button>
+                <button type="submit" class="btn btn-danger" :class="{ 'opacity-25': deleteUserForm.processing }" :disabled="deleteUserForm.processing">Bevestigen</button>
               </div>
             </div>
           </form>

@@ -4,9 +4,13 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+Use \Carbon\Carbon;
+
 use App\Models\User;
+use App\Models\Opdracht;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,14 +23,19 @@ class DatabaseSeeder extends Seeder
     {
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
 
-        $user = User::where("name", "Valentijn")->first();
+        // Create test users
+        $admin = User::factory()->create([
+            'email' => 'valentijnvanwinden@gmail.com',
+        ]);
+        $admin->assignRole($adminRole);
 
-        $user->assignRole($adminRole);
-        // \App\Models\User::factory(10)->create();
+        $planner = User::factory()->create([
+            'email' => 'planner@gmail.com',
+            'moneybird_id' => '1234012938102938',
+        ]);
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        Opdracht::factory()->count(10)->create([
+            'klant_moneybird_id' => '1234012938102938',
+        ]);
     }
 }

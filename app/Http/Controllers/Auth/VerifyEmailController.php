@@ -22,6 +22,7 @@ class VerifyEmailController extends Controller
         }
 
         if ($request->user()->markEmailAsVerified()) {
+            dd("Geverifieerd!");
             event(new Verified($request->user()));
         }
 

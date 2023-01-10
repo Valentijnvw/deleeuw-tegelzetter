@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "40a7bf97a0dd03a5e2c2d413c3a7c756",
+    "content-hash": "7a61ecdabf618ef6928d27bb14e62319",
     "packages": [
         {
             "name": "brick/math",
@@ -61,6 +61,52 @@
                 }
             ],
             "time": "2022-08-10T22:54:19+00:00"
+        },
+        {
+            "name": "casdr/laravel-moneybird",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/casdr/laravel-moneybird.git",
+                "reference": "35139a7094ca1c7b793b846b938d829fa497e1b3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/casdr/laravel-moneybird/zipball/35139a7094ca1c7b793b846b938d829fa497e1b3",
+                "reference": "35139a7094ca1c7b793b846b938d829fa497e1b3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.0",
+                "picqer/moneybird-php-client": ">=0.15.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Casdr\\Moneybird\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Cas de Reuver",
+                    "email": "cdreuver@blalabs.com"
+                }
+            ],
+            "description": "Moneybird package for Laravel based on Picq'ers client",
+            "homepage": "https://github.com/casdr/laravel-moneybird",
+            "keywords": [
+                "laravel",
+                "moneybird"
+            ],
+            "support": {
+                "issues": "https://github.com/casdr/laravel-moneybird/issues",
+                "source": "https://github.com/casdr/laravel-moneybird/tree/master"
+            },
+            "time": "2018-08-14T21:45:19+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
@@ -2247,6 +2293,59 @@
                 }
             ],
             "time": "2022-07-30T15:51:26+00:00"
+        },
+        {
+            "name": "picqer/moneybird-php-client",
+            "version": "v0.33.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/picqer/moneybird-php-client.git",
+                "reference": "8493ea0fc168209a00dfe63c0871d0441d1d054e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/picqer/moneybird-php-client/zipball/8493ea0fc168209a00dfe63c0871d0441d1d054e",
+                "reference": "8493ea0fc168209a00dfe63c0871d0441d1d054e",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "^6.3.1|^7.0",
+                "php": ">=7.3.0",
+                "psr/http-client": "^1.0"
+            },
+            "require-dev": {
+                "phpspec/prophecy-phpunit": "^2.0",
+                "phpunit/phpunit": "^8.5|^9.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Picqer\\Financials\\Moneybird\\": "src/Picqer/Financials/Moneybird"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Stephan Groen",
+                    "email": "info@picqer.com"
+                }
+            ],
+            "description": "A PHP Client for the Moneybird V2 API",
+            "homepage": "https://github.com/picqer/moneybird-php-client",
+            "keywords": [
+                "api",
+                "moneybird",
+                "php"
+            ],
+            "support": {
+                "issues": "https://github.com/picqer/moneybird-php-client/issues",
+                "source": "https://github.com/picqer/moneybird-php-client/tree/v0.33.0"
+            },
+            "time": "2022-04-28T14:33:32+00:00"
         },
         {
             "name": "psr/container",

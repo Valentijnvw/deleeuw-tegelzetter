@@ -17,4 +17,9 @@ export default defineConfig({
             },
         }),
     ],
+    resolve: {
+        alias: {
+            // 'node_moduless': path.resolve(__dirname, '/node_modules'),
+        },
+    }
 });

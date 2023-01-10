@@ -7,14 +7,22 @@ import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link, usePage } from '@inertiajs/inertia-vue3';
 
-console.log(usePage().props.value);
-
 const navItems = [
   {
     name: "Dashboard",
     routeName: 'dashboard',
     icon: "bi-house-door"
-  }
+  },
+  {
+    name: "Gebruikers",
+    routeName: 'user.list',
+    icon: "bi-house-door"
+  },
+  {
+    name: "Opdrachten",
+    routeName: "opdrachten.list",
+    icon: "bi-house-door",
+  },
 ]
 const showingNavigationDropdown = ref(false);
 
@@ -61,7 +69,7 @@ window.addEventListener('on-hs-appearance-change', function () {
         <!-- Logo -->
 
         <a class="navbar-brand" href="/" aria-label="Front">
-          <img class="navbar-brand-logo" src="../../svg/logos/logo.svg" alt="Logo" data-hs-theme-appearance="default">
+          <img class="navbar-brand-logo" src="../../img/deleeuw/deleeuwtegelzetterbv_V3-300x195.png" alt="Logo" data-hs-theme-appearance="default">
         </a>
 
         <!-- End Logo -->
@@ -596,18 +604,14 @@ window.addEventListener('on-hs-appearance-change', function () {
                 <button type="button" class="btn btn-ghost-secondary btn-icon rounded-circle" id="selectThemeDropdown" data-bs-toggle="dropdown" aria-expanded="false" data-bs-dropdown-animation=""><i class="bi-brightness-high"></i></button>
 
                 <div class="dropdown-menu dropdown-menu-end navbar-dropdown-menu navbar-dropdown-menu-borderless" aria-labelledby="selectThemeDropdown" style="opacity: 1;">
-                  <a class="dropdown-item" href="#" data-icon="bi-moon-stars" data-value="auto">
-                    <i class="bi-moon-stars me-2"></i>
-                    <span class="text-truncate" title="Auto (system default)">Auto (system default)</span>
-                  </a>
-                  <a class="dropdown-item active" href="#" data-icon="bi-brightness-high" data-value="default">
+                  <Link class="dropdown-item active" method="post" onFinish="() => {alert('hi')}" :href="route('userSettings.setAppearance')" :data="{'value': 'light'}" data-icon="bi-brightness-high" data-value="default">
                     <i class="bi-brightness-high me-2"></i>
-                    <span class="text-truncate" title="Default (light mode)">Default (light mode)</span>
-                  </a>
-                  <a class="dropdown-item" href="#" data-icon="bi-moon" data-value="dark">
+                    <span class="text-truncate" title="Lichte modus">Lichte modus</span>
+                  </Link>
+                  <Link class="dropdown-item" method="post" :href="route('userSettings.setAppearance')" :data="{'value': 'dark'}" data-icon="bi-moon" data-value="dark">
                     <i class="bi-moon me-2"></i>
-                    <span class="text-truncate" title="Dark">Dark</span>
-                  </a>
+                    <span class="text-truncate" title="Donkere modus">Donkere modus</span>
+                  </Link>
                 </div>
               </div>
 
@@ -731,7 +735,7 @@ window.addEventListener('on-hs-appearance-change', function () {
           <ul class="navbar-nav">
 
             <li class="nav-item" v-for="navItem in navItems" :key="navItem.name">
-              <a class="nav-link " :href="route(navItem.routeName)">
+              <a class="nav-link" :class="{'active': route().current(navItem.routeName)}" :href="route(navItem.routeName)">
                 <i class="dropdown-item-icon" :class="navItem.icon"></i> {{ navItem.name }}
               </a>
             </li>

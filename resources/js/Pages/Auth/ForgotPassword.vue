@@ -21,7 +21,7 @@ const submit = () => {
 
 <template>
     <LoginLayout>
-        <form class="js-validate needs-validation" novalidate>
+        <form class="js-validate needs-validation" @submit.prevent="submit()" novalidate>
               <div class="text-center">
                 <div class="mb-5">
                   <h1 class="display-5">Wachtwoord vergeten?</h1>

@@ -82,7 +82,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'nl',
 
     /*
     |--------------------------------------------------------------------------
@@ -186,6 +186,8 @@ return [
          * Package Service Providers...
          */
 
+         Casdr\Moneybird\MoneybirdServiceProvider::class,
+
         /*
          * Application Service Providers...
          */
@@ -210,6 +212,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
+        'Moneybird' => Casdr\Moneybird\MoneybirdFacade::class,
     ])->toArray(),
 
 ];
