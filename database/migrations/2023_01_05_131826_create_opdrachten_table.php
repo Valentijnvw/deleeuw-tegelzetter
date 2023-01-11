@@ -23,6 +23,7 @@ return new class extends Migration
             $table->time('eind_tijd');
             // $table->foreign('klant_moneybird_id')->references('moneybird_id')->on('users');
             $table->bigInteger('klant_moneybird_id')->nullable();
+            $table->text('titel');
             $table->text('omschrijving');
             $table->bigInteger('aannemer_user_id') // moet foreignId worden
                 // ->constrained('users')

@@ -23,6 +23,7 @@ class OpdrachtFactory extends Factory
             'eind_datum' => fake()->dateTimeThisMonth(),
             'start_tijd' => '12:00',
             'eind_tijd' => '16:00',
+            'titel' => 'Opdracht!!',
             'omschrijving' => fake()->text(),
         ];
     }

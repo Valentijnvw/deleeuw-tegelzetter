@@ -1,6 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import StepForm from '@/Components/StepForm.vue';
+import MoneybirdContactSelector from '@/Components/MoneybirdContactSelector.vue';
 import { Head, useForm } from '@inertiajs/inertia-vue3';
 import { useIMask  } from 'vue-imask';
 import { onMounted } from 'vue';
@@ -12,7 +13,7 @@ const props = defineProps({
 });
 
 const form = useForm({
-    naam: '',
+    titel: '',
     omschrijving: '',
     klant_moneybird_id: '',
     email: '',
@@ -26,14 +27,21 @@ const submitForm = () => {
 }
 
 onMounted(() => {
-  $("#ex2").flatpickr();
+  $(".flatpickr").flatpickr({
+    dateFormat: "d-m-Y"
+  });
+
 })
 
 </script>
 
-<style src="../../../../node_modules/tom-select/dist/css/tom-select.css">
-  /* @import "flatpickr"; */
-  /* @import "tom-select"; */
+<style>
+  /* @import "node_modules/tom-select/dist/css/tom-select.css"; */
+  @import "flatpickr";
+</style>
+
+<style src="node_modules/tom-select/dist/css/tom-select.bootstrap5.css">
+
 </style>
 
 <template>
@@ -41,49 +49,57 @@ onMounted(() => {
       <!-- Page Header -->
       <div class="page-header">
           <div class="row align-items-end">
-            <div class="col-sm mb-2 mb-sm-0">
-              <nav aria-label="breadcrumb">
-                <ol class="breadcrumb breadcrumb-no-gutter">
-                  <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">Pages</a></li>
-                  <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">Users</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Overview</li>
-                </ol>
-              </nav>
-
-              <h1 class="page-header-title">Users</h1>
+            <div class="col-sm mb-sm-0">
+              <h1 class="page-header-title">Opdracht toevoegen</h1>
             </div>
             <!-- End Col -->
 
-            <div class="col-sm-auto">
-              <a class="btn btn-primary" href="">
-                <i class="bi-person-plus-fill me-1"></i> Opdracht toevoegen
-              </a>
-            </div>
-            <!-- End Col -->
           </div>
           <!-- End Row -->
         </div>
-        <!-- End Page Header -->
-        <div class="card p-4">
-          <form @submit.prevent="submitForm">
-            <div class="row">
-              <div class="col-md-6">
-                <div class="mb-3">
-                  <label class="form-label" for="exampleFormControlInput1">Opdracht naam</label>
-                  <input type="text" v-model="form.naam" class="form-control" placeholder="Opdracht naam">
+        <div class="row justify-content-center">
+          <div class="col-lg-10">
+            <!-- End Page Header -->
+            <div class="card p-4">
+              <form @submit.prevent="submitForm">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label">Opdracht titel</label>
+                        <input type="text" v-model="form.titel" class="form-control" placeholder="Opdracht naam">
+                      </div>
+                      
+                      <div class="mb-3">
+                        <label class="form-label">Selecteer een klant</label>
+                        <MoneybirdContactSelector id="test123" placeholder="Selecteer een klant" name="moneybird_id" />
+                      </div>
+                      
+                    </div>
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label">Start datum</label>
+                        <input type="text" v-model="form.start_datum" class="form-control flatpickr" placeholder="Start datum">
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">Eind datum</label>
+                        <input type="text" v-model="form.eind_datum" class="form-control flatpickr" placeholder="Eind datum">
+                      </div>
+
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label" for="exampleFormControlInput1">Omschrijving</label>
+                    <textarea type="text" v-model="form.omschrijving" class="form-control" placeholder="Opdracht omschrijving" rows="4" />
+                  </div>
                 </div>
-                <div class="mb-3">
-                  <label class="form-label" for="exampleFormControlInput1">Start datum</label>
-                  <input type="text" v-model="form.start_datum" class="form-control" placeholder="John Doe">
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-primary"><i class="bi-check ms-1"></i> Opdracht toevoegen</button>
                 </div>
-              </div>
+              </form>
             </div>
 
-            <div class="mb-3">
-              <label class="form-label" for="exampleFormControlInput1">Omschrijving</label>
-              <textarea type="text" v-model="form.omschrijving" class="form-control" placeholder="Opdracht omschrijving" rows="4" />
-            </div>
-          </form>
+          </div>
         </div>
     </AuthenticatedLayout>
 </template>

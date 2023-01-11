@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
+import path from 'path';
 
 export default defineConfig({
     plugins: [
@@ -19,7 +20,7 @@ export default defineConfig({
     ],
     resolve: {
         alias: {
-            // 'node_moduless': path.resolve(__dirname, '/node_modules'),
+            'node_modules': path.resolve(__dirname, './node_modules'),
         },
     }
 });
