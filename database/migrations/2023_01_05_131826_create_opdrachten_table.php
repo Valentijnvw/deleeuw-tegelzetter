@@ -18,9 +18,9 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->date('start_datum');
-            $table->time('start_tijd');
+            $table->time('start_tijd')->nullable();
             $table->date('eind_datum');
-            $table->time('eind_tijd');
+            $table->time('eind_tijd')->nullable();
             // $table->foreign('klant_moneybird_id')->references('moneybird_id')->on('users');
             $table->bigInteger('klant_moneybird_id')->nullable();
             $table->text('titel');

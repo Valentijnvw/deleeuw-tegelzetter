@@ -58,7 +58,7 @@ console.log(props.opdrachtenList);
 
           <template #body>
             <tr v-for="opdracht in opdrachtenList" :key="opdracht.id">
-              <td>{{ opdracht.user.first_name + " " + opdracht.user.last_name }}</td>
+              <td>{{ opdracht.contact.firstname + " " + opdracht.contact.lastname }}</td>
               <td>{{ truncateString(opdracht.omschrijving, 100) }}</td>
               <td>{{ opdracht.start_datum }}</td>
               <td>{{ opdracht.eind_datum }}</td>

@@ -11,6 +11,9 @@ Use \Carbon\Carbon;
 
 use App\Models\User;
 use App\Models\Opdracht;
+use App\Models\MoneybirdContact;
+
+use App\Http\Controllers\MoneybirdController;
 
 class DatabaseSeeder extends Seeder
 {
@@ -31,11 +34,15 @@ class DatabaseSeeder extends Seeder
 
         $planner = User::factory()->create([
             'email' => 'planner@gmail.com',
-            'moneybird_id' => '1234012938102938',
+            'moneybird_id' => '376587614757586698',
         ]);
 
         Opdracht::factory()->count(10)->create([
-            'klant_moneybird_id' => '1234012938102938',
+            'klant_moneybird_id' => '376587614757586698',
         ]);
+
+        // Store the contact in moneybird_contacts
+        $contact = new MoneybirdContact();
+        MoneybirdController::updateOrStoreContact(376587614757586698);
     }
 }

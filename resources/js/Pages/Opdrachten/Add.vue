@@ -6,7 +6,6 @@ import { Head, useForm } from '@inertiajs/inertia-vue3';
 import { useIMask  } from 'vue-imask';
 import { onMounted } from 'vue';
 import flatpickr from 'flatpickr';
-import TomSelect from 'tom-select';
 
 const props = defineProps({
     
@@ -23,7 +22,7 @@ const form = useForm({
 });
 
 const submitForm = () => {
-
+  form.post(route('opdracht.store'));
 }
 
 onMounted(() => {
@@ -72,7 +71,7 @@ onMounted(() => {
                       
                       <div class="mb-3">
                         <label class="form-label">Selecteer een klant</label>
-                        <MoneybirdContactSelector id="test123" placeholder="Selecteer een klant" name="moneybird_id" />
+                        <MoneybirdContactSelector v-model="form.klant_moneybird_id" id="test123" placeholder="Selecteer een klant" name="moneybird_id" />
                       </div>
                       
                     </div>

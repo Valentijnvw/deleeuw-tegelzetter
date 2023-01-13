@@ -20,7 +20,7 @@ const navItems = [
   },
   {
     name: "Opdrachten",
-    routeName: "opdrachten.list",
+    routeName: "opdracht.list",
     icon: "bi-house-door",
   },
 ]

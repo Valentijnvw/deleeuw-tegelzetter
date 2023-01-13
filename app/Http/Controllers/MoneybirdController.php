@@ -10,14 +10,32 @@ use Casdr\Moneybird\MoneybirdFacade as Moneybird;
 use Picqer\Financials\Moneybird\Entities\Contact;
 use Picqer\Financials\Moneybird\Entities\ContactPeople;
 
+use App\Models\MoneybirdContact;
+
 class MoneybirdController extends Controller
 {
+    public static function getContact($moneybirdId)
+    {
+        return MoneybirdContacts::where('id', $moneybirdId)->firstOr(function() {
+            return updateOrStoreContact($moneybirdId);
+        });
+    }
+
+    // public static function updateOrStoreContact(Int $moneybirdId)
+    // {
+    //     $contact = Moneybird::contact()->find($moneybirdId);
+    //     $moneybirdContact = MoneybirdContact::firstOrCreate([
+    //         "id" => $moneybirdId
+    //     ]);
+    //     $moneybirdContact->fill($contact->attributes());
+    //     $moneybirdContact->save();
+    //     return $moneybirdContact;
+    // }
+
     public function userSearch(Request $request) {
         $query = $request->query('q');
         $contacts = Moneybird::contact()->search($query);
-        // dd($contacts);
         $contactList = collect($contacts)->map(function(Contact $contact) {
-    
             $contactPeople = collect($contact->contact_people)->map(function(ContactPeople $contact) {
                 return [
                     "first_name" => $contact->firstname,
@@ -39,9 +57,9 @@ class MoneybirdController extends Controller
                 "contact_person" => $contactPerson,
             ];
         });
-        // dd($contactList);
         return [
             "items" => $contactList,
         ];
     }
+    
 }

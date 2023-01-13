@@ -32,7 +32,7 @@ class UserController extends Controller
     public function add(Request $request)
     {
         return Inertia::render('Users/Add', [
-            
+            'roleList' => Role::all(),
         ]);
     }
 

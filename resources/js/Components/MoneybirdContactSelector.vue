@@ -6,20 +6,26 @@ const props = defineProps({
     id: String,
     name: String,
     placeholder: String,
+	modelValue: String,
 });
+
+const emit = defineEmits(['update:modelValue']);
 
 onMounted(() => {
   var settings = {
 		valueField: 'moneybird_id',
 		searchField: ['first_name','last_name', 'company_name', 'email', 'phone', 'city'],
         placeholder: props.placeholder,
+		onChange: function(value) {
+			emit('update:modelValue', value);
+			props.modelValue = value;
+		},
 		// fetch remote data
 		load: function(query, callback) {
 			var url = '/api/moneybird-test?q=' + encodeURIComponent(query);
 			fetch(url)
 				.then(response => response.json())
 				.then(json => {
-          console.log(json);
 					callback(json);
 				}).catch(()=>{
 					callback();
@@ -37,7 +43,7 @@ onMounted(() => {
 				return `<div class="row border-bottom py-2">
 							<div class="col-md-11">
 								<div class="mt-0">${escape(title)}
-									<span class="small text-muted"><i class="bi bi-envelope"></i> ${escape(item.email)}</span>
+									<span class="small text-muted">${escape(item.email)}</span>
 								</div>
 								<div class="mb-1"><i class="bi bi-geo"></i> ${escape(item.city)}</div>
 								<div class="d-flex text-muted">

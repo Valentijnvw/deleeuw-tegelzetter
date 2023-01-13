@@ -7,9 +7,9 @@ import { Head, useForm, usePage } from '@inertiajs/inertia-vue3';
 import { ref } from 'vue';
 import { capitalizeFirstLetter } from '@/util/stringUtils';
 const props = defineProps({
-    userList: Array,
-    roleList: Array,
-    errors: Object,
+  userList: Array,
+  roleList: Array,
+  errors: Object,
 });
 
 const editingUser = ref(null);

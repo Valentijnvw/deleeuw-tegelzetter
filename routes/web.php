@@ -4,10 +4,16 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\OpdrachtController;
+use App\Http\Controllers\MoneybirdController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Mail\Test;
+
+use App\Services\MoneybirdService;
+
+use App\Models\MoneybirdContact;
+use App\Models\Opdracht;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,21 +56,18 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::prefix('/opdrachten')->group(function () {
-        Route::get('/', [OpdrachtController::class, 'list'])->name('opdrachten.list');
-        Route::get('/add', [OpdrachtController::class, 'add'])->name('opdrachten.add');
+        Route::get('/', [OpdrachtController::class, 'list'])->name('opdracht.list');
+        Route::get('/add', [OpdrachtController::class, 'add'])->name('opdracht.add');
+        Route::post('/add', [OpdrachtController::class, 'store'])->name('opdracht.store');
+
     });
 });
 
 // TEST ROUTES
 
 Route::get('moneybird', function() {
-    $contact = Moneybird::contact();
-
-    $contact->company_name = 'BlaLabs';
-    $contact->firstname = 'Cas';
-    $contact->lastname = 'de Reuver';
-    // $contact->save();
-    return;
+    // $opdr = Opdracht::first();
+    // dd($opdr->moneybirdContact());
 });
 
 Route::get('mail', function() {

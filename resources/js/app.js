@@ -11,6 +11,9 @@ import '../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js';
 // Theme CSS
 import '../css/theme/hs-mega-menu.css';
 
+// Custom CSS
+import '../css/app.css';
+
 // Bootstrap icons
 import '../../node_modules/bootstrap-icons/font/bootstrap-icons.css';
 

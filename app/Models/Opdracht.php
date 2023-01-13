@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Http\Controllers\MoneybirdController;
+
+
 class Opdracht extends Model
 {
     use HasFactory;
@@ -12,8 +15,13 @@ class Opdracht extends Model
 
     
     public function user()
-    {
+    {   
         return $this->belongsTo(User::class, 'klant_moneybird_id', 'moneybird_id');
+    }
+
+    public function moneybirdContact()
+    {
+        return $this->belongsTo(MoneybirdContact::class, 'klant_moneybird_id', 'id');
     }
 
     /**
@@ -22,6 +30,7 @@ class Opdracht extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'titel',
         'start_datum',
         'start_tijd',
         'eind_datum',

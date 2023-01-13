@@ -3,9 +3,10 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, useForm } from '@inertiajs/inertia-vue3';
 import { useIMask  } from 'vue-imask';
 import { onMounted } from 'vue';
+import { capitalizeFirstLetter } from '@/util/stringUtils';
 
 const props = defineProps({
-    
+  roleList: Array,
 });
 
 // const { el, masked } = useIMask({
@@ -20,6 +21,7 @@ const form = useForm({
     password: '',
     password_confirmation: '',
     terms: false,
+    account_type: props.roleList[0].id,
 });
 
 onMounted(() => {
@@ -137,49 +139,14 @@ onMounted(() => {
                     <div class="col-sm-9">
                       <div class="input-group input-group-sm-vertical">
                         <!-- Radio Check -->
-                        <label class="form-control" for="userAccountTypeRadio1">
+                        <label class="form-control" v-for="role in roleList" :key="role.id">
                           <span class="form-check">
-                            <input type="radio" class="form-check-input" name="userAccountTypeRadio" id="userAccountTypeRadio1">
-                            <span class="form-check-label">Planner</span>
+                            <input type="radio" :value="role.id" class="form-check-input" v-model="form.account_type" name="userAccountTypeRadio">
+                            <span class="form-check-label" v-text="capitalizeFirstLetter(role.name)"></span>
                           </span>
                         </label>
                         <!-- End Radio Check -->
 
-                        <!-- Radio Check -->
-                        <label class="form-control" for="userAccountTypeRadio2">
-                          <span class="form-check">
-                            <input type="radio" class="form-check-input" name="userAccountTypeRadio" id="userAccountTypeRadio2">
-                            <span class="form-check-label">Eigenaar</span>
-                          </span>
-                        </label>
-                        <!-- End Radio Check -->
-
-                        <!-- Radio Check -->
-                        <label class="form-control" for="userAccountTypeRadio2">
-                          <span class="form-check">
-                            <input type="radio" class="form-check-input" name="userAccountTypeRadio" id="userAccountTypeRadio2">
-                            <span class="form-check-label">Aannemer</span>
-                          </span>
-                        </label>
-                        <!-- End Radio Check -->
-                        
-                        <!-- Radio Check -->
-                        <label class="form-control" for="userAccountTypeRadio2">
-                          <span class="form-check">
-                            <input type="radio" class="form-check-input" name="userAccountTypeRadio" id="userAccountTypeRadio2">
-                            <span class="form-check-label">Klant</span>
-                          </span>
-                        </label>
-                        <!-- End Radio Check -->
-
-                        <!-- Radio Check -->
-                        <label class="form-control" for="userAccountTypeRadio2">
-                          <span class="form-check">
-                            <input type="radio" class="form-check-input" name="userAccountTypeRadio" id="userAccountTypeRadio2">
-                            <span class="form-check-label">Admin</span>
-                          </span>
-                        </label>
-                        <!-- End Radio Check -->
                       </div>
                     </div>
                   </div>
