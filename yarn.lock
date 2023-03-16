@@ -333,6 +333,13 @@
   "resolved" "https://registry.npmjs.org/csstype/-/csstype-2.6.21.tgz"
   "version" "2.6.21"
 
+"datatables.net@^1.13.1":
+  "integrity" "sha512-cX5dDHsbVdLLYKsWOSE0MvuGUcV88zU5dZ/taK2puJV6F9Fw0CFsP3+U/kr+qpDSFOBLWISRyM4Q9wWWovPTNg=="
+  "resolved" "https://registry.npmjs.org/datatables.net/-/datatables.net-1.13.1.tgz"
+  "version" "1.13.1"
+  dependencies:
+    "jquery" ">=1.7"
+
 "deepmerge@^4.0.0":
   "integrity" "sha512-FJ3UgI4gIl+PHZm53knsuSFpE+nESMr7M4v9QcgB7S63Kj/6WqMiFQJpBBYz1Pt+66bZpP3Q7Lye0Oo9MPKEdg=="
   "resolved" "https://registry.npmjs.org/deepmerge/-/deepmerge-4.2.2.tgz"
@@ -552,7 +559,7 @@
   "resolved" "https://registry.npmjs.org/jquery-migrate/-/jquery-migrate-3.4.0.tgz"
   "version" "3.4.0"
 
-"jquery@^3.6.3", "jquery@>=3 <4":
+"jquery@^3.6.3", "jquery@>=1.7", "jquery@>=3 <4":
   "integrity" "sha512-bZ5Sy3YzKo9Fyc8wH2iIQK4JImJ6R0GWI9kL1/k7Z91ZBNgkRXE6U0JfHIizZbort8ZunhSI3jw9I6253ahKfg=="
   "resolved" "https://registry.npmjs.org/jquery/-/jquery-3.6.3.tgz"
   "version" "3.6.3"

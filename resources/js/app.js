@@ -1,9 +1,11 @@
 // jQuery
-import '../../node_modules/jquery/dist/jquery.min.js';
+// import $ from '../../node_modules/jquery/dist/jquery.min.js';
+import $ from 'jquery';
 // import '../../node_modules/jquery-migrate/dist/jquery-migrate.min.js'
 
 // Bootstrap
 import '../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js';
+import "../../node_modules/bootstrap/scss/bootstrap.scss";
 
 // Appear
 // import '../../node_modules/appear/dist/appear.js';

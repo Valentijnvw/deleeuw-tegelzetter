@@ -57,8 +57,8 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('/opdrachten')->group(function () {
         Route::get('/', [OpdrachtController::class, 'list'])->name('opdracht.list');
-        Route::get('/add', [OpdrachtController::class, 'add'])->name('opdracht.add');
-        Route::post('/add', [OpdrachtController::class, 'store'])->name('opdracht.store');
+        Route::get('/toevoegen', [OpdrachtController::class, 'add'])->name('opdracht.add');
+        Route::post('/toevoegen', [OpdrachtController::class, 'store'])->name('opdracht.store');
 
     });
 });

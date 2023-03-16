@@ -2,3 +2,11 @@
     background-color: rgb(240, 240, 240) !important;
     color: black !important;
 }
+
+header {
+    /* background-color: #FFDC9A !important; */
+}
+
+.btn-primary {
+    background-color: #A1313B !important;
+}

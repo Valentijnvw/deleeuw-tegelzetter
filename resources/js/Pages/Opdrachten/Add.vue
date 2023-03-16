@@ -35,7 +35,7 @@ onMounted(() => {
 </script>
 
 <style>
-  /* @import "node_modules/tom-select/dist/css/tom-select.css"; */
+  @import "node_modules/tom-select/dist/css/tom-select.css";
   @import "flatpickr";
 </style>
 

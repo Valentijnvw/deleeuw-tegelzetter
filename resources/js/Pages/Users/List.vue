@@ -2,7 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Modal from '@/Components/Modal.vue';
 import WachtwoordInput from '@/Components/WachtwoordInput.vue';
-import Table from '@/Components/Table.vue';
+// import Table from '@/Components/Table.vue';
 import { Head, useForm, usePage } from '@inertiajs/inertia-vue3';
 import { ref } from 'vue';
 import { capitalizeFirstLetter } from '@/util/stringUtils';
@@ -97,155 +97,80 @@ function editUserModal(user) {
       </div>
       <!-- End Page Header -->
 
-      <!-- Stats -->
-      <div class="row">
-        <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
-          <!-- Card -->
-          <div class="card h-100">
-            <div class="card-body">
-              <h6 class="card-subtitle mb-2">Total users</h6>
-
-              <div class="row align-items-center gx-2">
-                <div class="col">
-                  <span class="js-counter display-4 text-dark">24</span>
-                  <span class="text-body fs-5 ms-1">from 22</span>
-                </div>
-                <!-- End Col -->
-
-                <div class="col-auto">
-                  <span class="badge bg-soft-success text-success p-1">
-                    <i class="bi-graph-up"></i> 5.0%
-                  </span>
-                </div>
-                <!-- End Col -->
-              </div>
-              <!-- End Row -->
-            </div>
-          </div>
-          <!-- End Card -->
-        </div>
-
-        <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
-          <!-- Card -->
-          <div class="card h-100">
-            <div class="card-body">
-              <h6 class="card-subtitle mb-2">Active members</h6>
-
-              <div class="row align-items-center gx-2">
-                <div class="col">
-                  <span class="js-counter display-4 text-dark">12</span>
-                  <span class="text-body fs-5 ms-1">from 11</span>
-                </div>
-
-                <div class="col-auto">
-                  <span class="badge bg-soft-success text-success p-1">
-                    <i class="bi-graph-up"></i> 1.2%
-                  </span>
-                </div>
-              </div>
-              <!-- End Row -->
-            </div>
-          </div>
-          <!-- End Card -->
-        </div>
-
-        <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
-          <!-- Card -->
-          <div class="card h-100">
-            <div class="card-body">
-              <h6 class="card-subtitle mb-2">New/returning</h6>
-
-              <div class="row align-items-center gx-2">
-                <div class="col">
-                  <span class="js-counter display-4 text-dark">56</span>
-                  <span class="display-4 text-dark">%</span>
-                  <span class="text-body fs-5 ms-1">from 48.7</span>
-                </div>
-
-                <div class="col-auto">
-                  <span class="badge bg-soft-danger text-danger p-1">
-                    <i class="bi-graph-down"></i> 2.8%
-                  </span>
-                </div>
-              </div>
-              <!-- End Row -->
-            </div>
-          </div>
-          <!-- End Card -->
-        </div>
-
-        <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
-          <!-- Card -->
-          <div class="card h-100">
-            <div class="card-body">
-              <h6 class="card-subtitle mb-2">Active members</h6>
-
-              <div class="row align-items-center gx-2">
-                <div class="col">
-                  <span class="js-counter display-4 text-dark">28.6</span>
-                  <span class="display-4 text-dark">%</span>
-                  <span class="text-body fs-5 ms-1">from 28.6%</span>
-                </div>
-
-                <div class="col-auto">
-                  <span class="badge bg-soft-secondary text-secondary p-1">0.0%</span>
-                </div>
-              </div>
-              <!-- End Row -->
-            </div>
-          </div>
-          <!-- End Card -->
-        </div>
-      </div>
-      <!-- End Stats -->
-
       <!-- Card -->
       <div class="card">
-        <Table>
-          <template #head>
-            <tr>
-                <th class="table-column-pe-0">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="datatableCheckAll">
-                    <label class="form-check-label" for="datatableCheckAll"></label>
-                  </div>
-                </th>
-                <th class="table-column-ps-0">Naam</th>
-                <th>Account type</th>
+        <!-- Header -->
+        <div class="card-header card-header-content-md-between">
+          <div class="mb-2 mb-md-0">
+            <form>
+              <!-- Search -->
+              <div class="input-group input-group-merge input-group-flush">
+                <div class="input-group-prepend input-group-text">
+                  <i class="bi-search"></i>
+                </div>
+                <input id="datatableSearch" type="search" class="form-control" placeholder="Search users" aria-label="Search users">
+              </div>
+              <!-- End Search -->
+            </form>
+          </div>
+
+          <div class="d-grid d-sm-flex justify-content-md-end align-items-sm-center gap-2">
+            <!-- Datatable Info -->
+            <div id="datatableCounterInfo" style="display: none;">
+              <div class="d-flex align-items-center">
+                <span class="fs-5 me-3">
+                  <span id="datatableCounter">0</span>
+                  Selected
+                </span>
+                <a class="btn btn-outline-danger btn-sm" href="javascript:;">
+                  <i class="bi-trash"></i> Delete
+                </a>
+              </div>
+            </div>
+            <!-- End Datatable Info -->
+          </div>
+        </div>
+        <!-- End Header -->
+
+        <!-- Table -->
+        <div class="table-responsive datatable-custom position-relative">
+          <table class="js-datatable table table-lg table-borderless table-thead-bordered table-nowrap table-align-middle card-table">
+            <thead class="thead-light">
+              <tr>
+                <th>Naam</th>
+                <th>Positie</th>
+                <th>Heeft een account?</th>
                 <th></th>
               </tr>
-          </template>
-          <template #body>
-            <tr v-for="user in userList" :key="user.id">
-              <td class="table-column-pe-0">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="" id="datatableCheckAll1">
-                  <label class="form-check-label" for="datatableCheckAll1"></label>
-                </div>
-              </td>
-              <td class="table-column-ps-0">
-                <span class="d-flex align-items-center">
-                  <div class="avatar avatar-circle">
-                    <img class="avatar-img" src="../../../img/160x160/img10.jpg" alt="Image Description">
-                  </div>
-                  <div class="ms-3">
-                    <span class="d-block h5 text-inherit mb-0">{{ user.first_name + " " + user.last_name }}</span>
-                    <span class="d-block fs-5 text-body">{{ user.email }}</span>
-                  </div>
-                </span>
-              </td>
-              <td>
-                <span class="d-block h5 mb-0">{{ capitalizeFirstLetter(user.roles.map(role => role.name).join(", ")) }}</span>
-              </td>
-              <td>
-                <button type="button" class="btn btn-white btn-sm" data-bs-toggle="modal" data-bs-target="#editUserModal" @click="editUserModal(user);">
-                  <i class="bi-pencil-fill me-1"></i> Bewerken
-                </button>
-              </td>
-            </tr>
-          </template>
+            </thead>
 
-        </Table>
+            <tbody>
+              <tr v-for="user in userList" :key="user.id">
+                <td>
+                  <span class="d-flex align-items-center">
+                    <div class="avatar avatar-circle">
+                      <img class="avatar-img" src="../../../img/160x160/img10.jpg" alt="Image Description">
+                    </div>
+                    <div class="ms-3">
+                      <span class="d-block h5 text-inherit mb-0">{{ user.first_name + " " + user.last_name }}</span>
+                      <span class="d-block fs-5 text-body">{{ user.email }}</span>
+                    </div>
+                  </span>
+                </td>
+                <td>
+                  <span class="d-block h5 mb-0">{{ capitalizeFirstLetter(user.roles.map(role => role.name).join(", ")) }}</span>
+                </td>
+                <td>
+                  <button type="button" class="btn btn-white btn-sm" data-bs-toggle="modal" data-bs-target="#editUserModal" @click="editUserModal(user);">
+                    <i class="bi-pencil-fill me-1"></i> Bewerken
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- End Table -->
+
       </div>
       <!-- End Card -->
     </AuthenticatedLayout>

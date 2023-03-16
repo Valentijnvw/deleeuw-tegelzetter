@@ -13,7 +13,7 @@ use App\Models\User;
 use App\Models\Opdracht;
 use App\Models\MoneybirdContact;
 
-use App\Http\Controllers\MoneybirdController;
+use App\Services\MoneybirdContactService;
 
 class DatabaseSeeder extends Seeder
 {
@@ -25,6 +25,8 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
+        Role::firstOrCreate(['name' => 'klant']);
+        Role::firstOrCreate(['name' => 'planner']);
 
         // Create test users
         $admin = User::factory()->create([
@@ -42,7 +44,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Store the contact in moneybird_contacts
-        $contact = new MoneybirdContact();
-        MoneybirdController::updateOrStoreContact(376587614757586698);
+        $contact = new MoneybirdContactService(376587614757586698);
+        $contact->insertOrUpdateContact();
     }
 }

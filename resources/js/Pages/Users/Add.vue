@@ -1,18 +1,20 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import MoneybirdContactSelector from '@/Components/MoneybirdContactSelector.vue';
 import { Head, useForm } from '@inertiajs/inertia-vue3';
 import { useIMask  } from 'vue-imask';
-import { onMounted } from 'vue';
+import { onMounted, computed } from 'vue';
 import { capitalizeFirstLetter } from '@/util/stringUtils';
 
 const props = defineProps({
   roleList: Array,
 });
 
-// const { el, masked } = useIMask({
-//   mask: Number,
-//   radix: '.',
-// });
+const klantRoleIndex = props.roleList.map(obj => obj.name).indexOf("klant");
+const klantRoleId = props.roleList[klantRoleIndex].id;
+const klantToevoegen = computed(() => {
+  return form.account_type === klantRoleId;
+})
 
 const form = useForm({
     firstName: '',
@@ -21,7 +23,7 @@ const form = useForm({
     password: '',
     password_confirmation: '',
     terms: false,
-    account_type: props.roleList[0].id,
+    // account_type: props.roleList[0].id,
 });
 
 onMounted(() => {
@@ -48,6 +50,15 @@ onMounted(() => {
 
 </script>
 
+<style>
+.step .active .step-icon, .step .active.is-valid .step-icon, .step .visited .step-icon {
+  background-color: #A1313B !important;
+}
+.step .active .step-title, .step .active.is-valid .step-title, .step .visited .step-title {
+  color: #A1313B !important;
+}
+</style>
+
 <template>
     <AuthenticatedLayout>
     <!-- Step Form -->
@@ -67,7 +78,7 @@ onMounted(() => {
                   }'>
                   <span class="step-icon step-icon-soft-dark">1</span>
                   <div class="step-content">
-                    <span class="step-title">Gegevens</span>
+                    <span class="step-title t-orange">Gegevens</span>
                   </div>
                 </a>
               </li>
@@ -91,49 +102,10 @@ onMounted(() => {
               <div id="addUserStepProfile" class="card card-lg active">
                 <!-- Body -->
                 <div class="card-body">
+                  <!-- OVERIG: -->
 
                   <!-- Form -->
                   <div class="row mb-4">
-                    <label for="firstNameLabel" class="col-sm-3 col-form-label form-label">Volledige naam</label>
-
-                    <div class="col-sm-9">
-                      <div class="input-group input-group-sm-vertical">
-                        <input type="text" v-model="form.firstName" class="form-control" name="firstName" id="firstNameLabel" placeholder="Voornaam">
-                        <input type="text" v-model="form.lastName" class="form-control" name="lastName" id="lastNameLabel" placeholder="Achternaam">
-                      </div>
-                    </div>
-                  </div>
-                  <!-- End Form -->
-
-                  <!-- Form -->
-                  <div class="row mb-4">
-                    <label for="emailLabel" class="col-sm-3 col-form-label form-label">Email</label>
-
-                    <div class="col-sm-9">
-                      <input type="email" v-model="form.email" class="form-control" name="email" id="emailLabel" placeholder="E-mailadres">
-                    </div>
-                  </div>
-                  <!-- End Form -->
-
-                  <!-- Form -->
-                  <div class="js-add-field row mb-4" data-hs-add-field-options='{
-                          "template": "#addPhoneFieldTemplate",
-                          "container": "#addPhoneFieldContainer",
-                          "defaultCreated": 0
-                        }'>
-                    <label for="phoneLabel" class="col-sm-3 col-form-label form-label">Telefoonnummer</label>
-
-                    <div class="col-sm-9">
-                      <div class="input-group input-group-sm-vertical">
-                        <input type="text" v-model="form.phone" class="js-input-mask form-control" name="phone" id="phoneLabel" placeholder="Telefoonnummer (bijv. 0612345678)">
-
-                      </div>
-                    </div>
-                  </div>
-                  <!-- End Form -->
-
-                  <!-- Form -->
-                  <div class="row">
                     <label class="col-sm-3 col-form-label form-label">Account type</label>
 
                     <div class="col-sm-9">
@@ -151,6 +123,62 @@ onMounted(() => {
                     </div>
                   </div>
                   <!-- End Form -->
+
+                  <template v-if="klantToevoegen">
+                    <!-- KLANT: -->
+                    <div class="row mb-4" v-if="klantToevoegen">
+                      <label class="col-sm-3 col-form-label form-label">Selecteer een klant</label>
+  
+                      <div class="col-sm-9">
+                          <MoneybirdContactSelector v-model="form.klant_moneybird_id" id="test123" placeholder="Selecteer een klant..." name="moneybird_id" />
+                      </div>
+                    </div>
+                    <!-- End Form -->
+
+                  </template>
+
+                  <template v-else>
+                    <!-- Form: overig -->
+                    <div class="row mb-4">
+                      <label for="firstNameLabel" class="col-sm-3 col-form-label form-label">Volledige naam</label>
+  
+                      <div class="col-sm-9">
+                        <div class="input-group input-group-sm-vertical">
+                          <input type="text" v-model="form.firstName" class="form-control" name="firstName" id="firstNameLabel" placeholder="Voornaam">
+                          <input type="text" v-model="form.lastName" class="form-control" name="lastName" id="lastNameLabel" placeholder="Achternaam">
+                        </div>
+                      </div>
+                    </div>
+                    <!-- End Form -->
+  
+                    <!-- Form -->
+                    <div class="row mb-4">
+                      <label for="emailLabel" class="col-sm-3 col-form-label form-label">Email</label>
+  
+                      <div class="col-sm-9">
+                        <input type="email" v-model="form.email" class="form-control" name="email" id="emailLabel" placeholder="E-mailadres">
+                      </div>
+                    </div>
+                    <!-- End Form -->
+  
+                    <!-- Form -->
+                    <div class="js-add-field row mb-4" data-hs-add-field-options='{
+                            "template": "#addPhoneFieldTemplate",
+                            "container": "#addPhoneFieldContainer",
+                            "defaultCreated": 0
+                          }'>
+                      <label for="phoneLabel" class="col-sm-3 col-form-label form-label">Telefoonnummer</label>
+  
+                      <div class="col-sm-9">
+                        <div class="input-group input-group-sm-vertical">
+                          <input type="text" v-model="form.phone" class="js-input-mask form-control" name="phone" id="phoneLabel" placeholder="Telefoonnummer (bijv. 0612345678)">
+  
+                        </div>
+                      </div>
+                    </div>
+                    <!-- End Form -->
+                  </template>
+                  
                 </div>
                 <!-- End Body -->
 
@@ -159,7 +187,7 @@ onMounted(() => {
                   <button type="button" class="btn btn-primary" data-hs-step-form-next-options='{
                             "targetSelector": "#addUserStepConfirmation"
                           }'>
-                    Next <i class="bi-chevron-right"></i>
+                    Volgende <i class="bi-chevron-right"></i>
                   </button>
                 </div>
                 <!-- End Footer -->
